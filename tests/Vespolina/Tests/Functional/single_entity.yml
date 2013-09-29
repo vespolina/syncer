@@ -1,0 +1,9 @@
+syncer:
+  default_direction: download
+  default_remote: demo_system_1
+  entities:
+      product:
+          strategy: incremental_id
+  remotes:
+      demo_system_1:
+          adapter: Vespolina\Sync\Adapter\RemoteAdapter
