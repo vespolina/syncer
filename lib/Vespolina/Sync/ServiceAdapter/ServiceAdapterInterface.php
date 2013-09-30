@@ -17,9 +17,27 @@ namespace Vespolina\Sync\ServiceAdapter;
  */
 interface ServiceAdapterInterface
 {
+    /**
+     * Retrieve entities starting from $lastValue
+     *
+     * @param $lastValue
+     * @param $packageSize Max number of entities to retrieve
+     * @return mixed
+     */
     function fetchEntities($lastValue, $packageSize);
 
+    /**
+     * Does this service adapter supports $entityName ?
+     *
+     * @param $entityName
+     * @return mixed
+     */
     function supportsEntity($entityName);
 
+    /**
+     * Retrieve the supported entities
+     *
+     * @return array
+     */
     function getSupportedEntities();
 }

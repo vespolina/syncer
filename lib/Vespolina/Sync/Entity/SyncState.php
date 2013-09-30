@@ -23,6 +23,11 @@ class SyncState implements SyncStateInterface
     protected $entityName;
     protected $lastValue;
 
+    public function __construct($entityName)
+    {
+        $this->entityName = $entityName;
+    }
+
     /**
      * @param mixed $active
      */

@@ -14,24 +14,24 @@ use Vespolina\Sync\Gateway\SyncGatewayInterface;
 use Vespolina\Sync\Handler\DefaultEntityHandler;
 use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
 
-class SyncManager
+class SyncManager implements SyncManagerInterface
 {
     protected $dispatcher;
-    protected $dependencyHandlers;
+    protected $handlers;
     protected $gateway;
     protected $serviceAdaptersByEntityName;
     protected $queues;
 
     public function __construct(SyncGatewayInterface $gateway, EventDispatcherInterface $dispatcher)
     {
-        $this->dependencyHandlers = array();
+        $this->handlers = array();
         $this->dispatcher = $dispatcher;
         $this->gateway = $gateway;
         $this->serviceAdaptersByEntityName = array();
         $this->queues = array();
 
-        //Setup the default dependency handler
-        $this->dependencyHandlers['default'] = new DefaultEntityHandler();
+        //Setup the default entity handler
+        $this->handlers['default'] = new DefaultEntityHandler();
     }
 
     public function addServiceAdapter(ServiceAdapterInterface $adapter)
@@ -54,12 +54,14 @@ class SyncManager
             $adapter = $this->getServiceAdapter($entityName);
 
             //Fetch entities after 'lastValue'
+
+            //TODO iterate
             $entities = $adapter->fetchEntities($lastValue, 100);
 
             //Analyze and adjust the entity sync state
             $this->analyseEntities($state, $entities);
 
-            //Persist the updated state of this entity
+            //Persist the updated state of this entity type
             $this->updateState($state);
         }
     }
@@ -71,7 +73,7 @@ class SyncManager
             return $this->serviceAdaptersByEntityName[$entityName];
 
         } else {
-            throw new \RuntimeException('No service adapter available for ' . $entityName);
+            throw new \RuntimeException('No service adapter available for entity ' . $entityName);
         }
     }
 
@@ -94,9 +96,9 @@ class SyncManager
     protected function analyseEntities(SyncState $state, array $entities)
     {
         if (count($entities) == 0) return;
-
         //Get the last entity
         $lastEntity = end($entities);
+
         $state->setLastValue($lastEntity->id);  //TODO: make generic
     }
 }

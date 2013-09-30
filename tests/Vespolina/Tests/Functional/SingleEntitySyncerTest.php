@@ -19,7 +19,7 @@ use Vespolina\Sync\Manager\SyncManager;
 
 /**
  */
-class SyncerTest extends \PHPUnit_Framework_TestCase
+class SingleEntitySyncerTest extends \PHPUnit_Framework_TestCase
 {
     protected $manager;
     protected $dispatcher;
@@ -41,7 +41,7 @@ class SyncerTest extends \PHPUnit_Framework_TestCase
         //Setup the synchonization configuration
         $this->setupConfiguration();
 
-        //Setup the synchronization state
+        //Setup (fake) the synchronization state
         $this->setSyncState();
 
         //Perform synchronization
@@ -51,7 +51,7 @@ class SyncerTest extends \PHPUnit_Framework_TestCase
         //Test if all requested entities have been synced
         $state = $this->manager->getState('product');
 
-        $this->assertEquals($state->getLastValue(), 10);
+        $this->assertEquals($state->getLastValue(), 20);
 
     }
 
@@ -65,6 +65,8 @@ class SyncerTest extends \PHPUnit_Framework_TestCase
     protected function setSyncState()
     {
         $syncState = new SyncState('product');
+
+        //Fake that we already  synced 5 entities last time
         $syncState->setLastValue(5);
 
         $this->manager->updateState($syncState);
@@ -75,8 +77,8 @@ class SyncerTest extends \PHPUnit_Framework_TestCase
         //Create a remote service adapter which can deal with products
         $this->remoteServiceAdapter = new DummyRemoteServiceAdapter(array('product'));
 
-        for ($i = 0; $i < 20;$i++) {
-            $entity = new RemoteEntity();
+        for ($i = 1; $i <= 20;$i++) {
+            $entity = new RemoteProduct();
             $entity->id = $i;
             $this->remoteServiceAdapter->add($entity);
         }
@@ -85,17 +87,25 @@ class SyncerTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class RemoteEntity{
+
+class RemoteProduct{
     public $id;
 }
 
+/**
+ * A dummy remote service adapter, eg. in the real world it might be an adaptor to web services
+ * such as Zoho, Magento Go, ...
+ *
+ * Class DummyRemoteServiceAdapter
+ * @package Vespolina\Tests\Functional
+ */
 class DummyRemoteServiceAdapter extends AbstractServiceAdapter
 {
     protected $entities;
     protected $size;
     protected $lastValue;
 
-    public function add(RemoteEntity $entity)
+    public function add($entity)
     {
         if (null == $this->entities) $this->entities = array();
         $this->entities[] = $entity;
@@ -108,7 +118,7 @@ class DummyRemoteServiceAdapter extends AbstractServiceAdapter
         //Simple naive implementation comparing the entity id
         foreach ($this->entities as $entity) {
 
-            if ($entity->id > $lastValue) {
+            if ($entity->id > $lastValue || null == $lastValue) {
                 $out[] = $entity;
             }
         }
