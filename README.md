@@ -37,9 +37,9 @@ $this->syncManager->addServiceAdapter($zohoInvoiceServiceAdapter);
 $this->syncManager->execute(array('invoice'));
 ```
 
-The service adapter needs to implement abstract methods fetchEntities, fetchEntity and transformEntityData.
+The service adapter needs to implement abstract methods *fetchEntities* , *fetchEntity* and *transformEntityData*.
 
-fetchEntities downloads the entities from a remote service and creates for each remote entity an EntityData instance.
+*fetchEntities* downloads the entities from a remote service and creates for each remote entity an EntityData instance.
 This instance contains the name of the entity (eg. 'invoice'), the remote identification (eg. zoho id '234324') and raw entity information (eg. xml or json data).
 
 The service adapter can then register additional dependencies to be resolved.  For instance the zoho invoice entity requires the zoho customer entity.
@@ -51,26 +51,26 @@ The system can can directly resolve dependencies when detected or first store th
 
 Resolve dependencies inmediately:
 
-1) For each remote invoice
-2) Register partial invoice data in EntityData,
-3) Resolve dependent remote entity 'customer' 12313
-3) Resolve dependent remote entity 'product' 222 qnd 'product' 333
-4) When local 'customer' and 'product entities have been created, use that to create the invoice entity
-5) End for each remote invoice
+1. For each remote invoice
+2. Register partial invoice data in EntityData,
+3. Resolve dependent remote entity 'customer' 12313
+3. Resolve dependent remote entity 'product' 222 qnd 'product' 333
+4. When local 'customer' and 'product entities have been created, use that to create the invoice entity
+5. End for each remote invoice
 
 Delay resolving dependencies:
 
-1) For each remote invoice
-2) Register partial invoice data in EntityData,
-3) End for each remote invoice
-4) For each unresolved dependency
-5) Resolve dependency
-6) End for each unresolved dependency
-7) Retrieve partial entity date invoices
-8) transform into a real invoice
-9) When local 'customer' and 'product entities have been created, use that to create the invoice entity
+1. For each remote invoice
+2. Register partial invoice data in EntityData,
+3. End for each remote invoice
+4. For each unresolved dependency
+5. Resolve dependency
+6. End for each unresolved dependency
+7. Retrieve partial entity date invoices
+8. transform into a real invoice
+9. When local 'customer' and 'product entities have been created, use that to create the invoice entity
 
-Having all dependencies resolved the requested entity (eg 'invoice') is created using the transformEntityData method of the service adapter.
+Having all dependencies resolved the requested entity (eg 'invoice') is created using the *transformEntityData* method of the service adapter.
 
 
 
