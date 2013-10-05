@@ -13,7 +13,7 @@ use Vespolina\Sync\Entity\SyncStateInterface;
 
 
 /**
- * An class to manage the synchronization state in memory
+ * An class to manage the synchronization state of a collection of entities of the same type
  *
  * @author Daniel Kucharski <daniel@vespolina.org>
  */

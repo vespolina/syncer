@@ -12,6 +12,7 @@ namespace Vespolina\Tests\Functional;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\SyncState;
 use Vespolina\Sync\Gateway\SyncMemoryGateway;
 use Vespolina\Sync\ServiceAdapter\AbstractServiceAdapter;
@@ -30,7 +31,7 @@ class SingleEntitySyncerTest extends \PHPUnit_Framework_TestCase
     {
         $this->dispatcher = new EventDispatcher();
         $this->gateway = new SyncMemoryGateway();
-        $this->manager = new SyncManager($this->gateway, $this->dispatcher);
+        $this->manager = new SyncManager($this->gateway, $this->dispatcher, null);
     }
 
     public function testSyncEntitiesFromOneRemoteService()
@@ -88,6 +89,12 @@ class SingleEntitySyncerTest extends \PHPUnit_Framework_TestCase
 }
 
 
+class LocalProduct{
+    public $id;
+    public function getId() {
+        return $this->id;
+    }
+}
 class RemoteProduct{
     public $id;
 }
@@ -108,10 +115,18 @@ class DummyRemoteServiceAdapter extends AbstractServiceAdapter
     public function add($entity)
     {
         if (null == $this->entities) $this->entities = array();
-        $this->entities[] = $entity;
+        $this->entities[$entity->id] = $entity;
     }
 
-    public function fetchEntities($lastValue, $size)
+    public function fetchEntity($entityName, $remoteId)
+    {
+        if (array_key_exists($remoteId, $this->entities)) {
+
+            return new EntityData($entityName, $remoteId, '<xml>...blablabla...</xml>');
+        }
+    }
+
+    public function fetchEntities($entityName, $lastValue, $size)
     {
         $out = array();
 
@@ -119,10 +134,18 @@ class DummyRemoteServiceAdapter extends AbstractServiceAdapter
         foreach ($this->entities as $entity) {
 
             if ($entity->id > $lastValue || null == $lastValue) {
-                $out[] = $entity;
+                $out[] = new EntityData($entityName, $entity->id);
             }
         }
 
        return $out;
+    }
+
+    public function transformEntityData(EntityData $entityData)
+    {
+        $product = new LocalProduct();
+        $product->id = 'local' . $entityData->getEntityId();   //In reality the local persistence gateway would generate local id
+
+        return $product;
     }
 }

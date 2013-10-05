@@ -9,6 +9,7 @@
 
 namespace Vespolina\Sync\ServiceAdapter;
 
+use Vespolina\Sync\Entity\EntityData;
 
 /**
  * An interface to manage a remote service
@@ -20,11 +21,28 @@ interface ServiceAdapterInterface
     /**
      * Retrieve entities starting from $lastValue
      *
+     * @param $entityName
      * @param $lastValue
      * @param $packageSize Max number of entities to retrieve
-     * @return mixed
+     * @return array EntityData
      */
-    function fetchEntities($lastValue, $packageSize);
+    function fetchEntities($entityName, $lastValue, $packageSize);
+
+    /**
+     * Fetch a specific remote entity
+     *
+     * @param $entityName
+     * @param $remoteId
+     * @return Vespolina\Sync\Entity\EntityData
+     */
+    function fetchEntity($entityName, $remoteId);
+
+    /**
+     * Retrieve the supported entities
+     *
+     * @return array
+     */
+    function getSupportedEntities();
 
     /**
      * Does this service adapter supports $entityName ?
@@ -34,10 +52,14 @@ interface ServiceAdapterInterface
      */
     function supportsEntity($entityName);
 
+
     /**
-     * Retrieve the supported entities
+     * Transform the entity data object into the real entity.
+     * The method will be called by the sync manager when all dependencies have been resolved
      *
-     * @return array
+     * @param EntityData $entityData
+     * @return mixed
      */
-    function getSupportedEntities();
+    function transformEntityData(EntityData $entityData);
+
 }

@@ -11,10 +11,14 @@ use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
  */
 abstract class AbstractServiceAdapter implements ServiceAdapterInterface
 {
+    protected $config;
+    protected $logger;
     protected $supportedEntities;
 
-    public function __construct(array $supportedEntities = array())
+    public function __construct(array $supportedEntities, array $config = array(), $logger = null)
     {
+        $this->config = $config;
+        $this->logger = $logger;
         $this->supportedEntities = $supportedEntities;
     }
 
