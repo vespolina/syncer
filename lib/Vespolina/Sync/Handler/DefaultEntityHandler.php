@@ -3,7 +3,7 @@
 namespace Vespolina\Sync\Handler;
 
 /**
- * Interface to determine and handle dependencies for a given entity type
+ * Interface to determine and handle dependencies for a generic entity
  *
  * @author Daniel Kucharski <daniel@vespolina.org>
  */

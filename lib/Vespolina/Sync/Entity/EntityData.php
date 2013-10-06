@@ -57,6 +57,13 @@ class EntityData
     {
         return $this->data;
     }
+
+    public function getDependencyReference($entityName)
+    {
+        return $this->dependencies[$entityName]['reference'];
+    }
+
+
     public function getDependencies()
     {
         return $this->dependencies;
@@ -71,6 +78,12 @@ class EntityData
     {
         return $this->entityName;
     }
+
+    public function getKey()
+    {
+        return $this->entityName . '.' . $this->entityId;
+    }
+
 
     public function setDependencyReference($entityName, $reference)
     {

@@ -9,15 +9,26 @@
 
 namespace Vespolina\Sync\Gateway;
 
+use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\SyncStateInterface;
 
 /**
  * An interface to manage the synchronization state
  *
- * @author Daniel Kucharski <daniel-xerias.be>
+ * @author Daniel Kucharski <daniel@vespolina.org>
  */
 interface SyncGatewayInterface
 {
+
+    /**
+     * Find the local id for the remote id identified by remote id
+     *
+     * @param $entityName
+     * @param $remoteId
+     * @return mixed
+     */
+    function findLocalId($entityName, $remoteId);
+
     /**
      * Retrieve the current state for the specified entity name
      *
@@ -35,6 +46,13 @@ interface SyncGatewayInterface
      */
     function updateIdMapping($entityName, $localId, $remoteId);
 
+
+    /**
+     * Create or update an entity data instance
+     *
+     * @param EntityData $entityData
+     */
+    function updateEntityData(EntityData $entityData);
     /**
      * Update the synchronisation state of an entity collection
      *

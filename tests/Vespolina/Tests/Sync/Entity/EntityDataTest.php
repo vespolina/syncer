@@ -47,4 +47,10 @@ class EntityDataTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('9876', $dependency['data']);
         };
     }
+
+    public function testGetKey()
+    {
+        $entityData = new EntityData('book', '12345', '<xml>...</xml>');
+        $this->assertEquals('book.12345', $entityData->getKey());
+    }
 }

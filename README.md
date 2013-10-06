@@ -24,7 +24,7 @@ None ;-)
 Example usage
 
 ```
-// Create a new manager and manage persistency in memory
+// Create a new manager and persist data in memory
 $syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $this->logger );
 
 // Instantiate your own service adapter, for example to the ZOHO api

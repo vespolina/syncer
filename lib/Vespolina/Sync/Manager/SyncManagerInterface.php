@@ -14,10 +14,17 @@ use Vespolina\Sync\Entity\SyncStateInterface;
 /**
  * An interface to manage the synchronization state
  *
- * @author Daniel Kucharski <daniel-xerias.be>
+ * @author Daniel Kucharski <daniel@vespolina.org>
  */
 interface SyncManagerInterface
 {
+    /**
+     * Execute synchronization for the given list of entities
+     *
+     * @param array $entityNames
+     * @return mixed
+     */
+    function execute(array $entityNames = array(), $package = 100);
 
     /**
      * Retrieve the synchronisation state for the entity

@@ -15,6 +15,9 @@ abstract class AbstractServiceAdapter implements ServiceAdapterInterface
     protected $logger;
     protected $supportedEntities;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(array $supportedEntities, array $config = array(), $logger = null)
     {
         $this->config = $config;
@@ -22,11 +25,17 @@ abstract class AbstractServiceAdapter implements ServiceAdapterInterface
         $this->supportedEntities = $supportedEntities;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSupportedEntities()
     {
         return $this->supportedEntities;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supportsEntity($entityName)
     {
         return in_array($this->supportedEntities, $entityName);

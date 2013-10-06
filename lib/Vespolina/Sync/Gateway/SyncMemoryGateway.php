@@ -9,6 +9,7 @@
 
 namespace Vespolina\Sync\Gateway;
 
+use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\SyncStateInterface;
 
 /**
@@ -19,14 +20,19 @@ use Vespolina\Sync\Entity\SyncStateInterface;
 class SyncMemoryGateway implements SyncGatewayInterface
 {
     protected $data;
+    protected $entityData;
     protected $idMapping;
 
     public function __construct()
     {
         $this->data = array();
+        $this->entityData = array();
         $this->idMapping = array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalId($entityName, $remoteId)
     {
         if (!array_key_exists($entityName, $this->idMapping))
@@ -37,6 +43,10 @@ class SyncMemoryGateway implements SyncGatewayInterface
         return $this->idMapping[$entityName][$remoteId];
 
     }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findStateByEntityName($entityName)
     {
         if (array_key_exists($entityName, $this->data)) {
@@ -45,11 +55,17 @@ class SyncMemoryGateway implements SyncGatewayInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIdMapping()
     {
         return $this->idMapping;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
         if (array_key_exists($entityName, $this->idMapping)) {
@@ -62,7 +78,16 @@ class SyncMemoryGateway implements SyncGatewayInterface
         $this->idMapping[$entityName] = $entityMapping;
     }
 
-    public function updateState(SyncStateInterface $syncState) {
+    public function updateEntityData(EntityData $entityData)
+    {
+        $this->entityData[$entityData->getKey()] = $entityData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateState(SyncStateInterface $syncState)
+    {
 
         $this->data[$syncState->getEntityName()] = $syncState;
     }

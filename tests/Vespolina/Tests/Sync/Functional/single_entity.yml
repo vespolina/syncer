@@ -1,6 +1,7 @@
 syncer:
-  default_direction: download
-  default_remote: demo_system_1
+  direction: download
+  delay_dependency_processing: false
+  use_id_mapping: true
   entities:
       product:
           strategy: incremental_id

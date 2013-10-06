@@ -11,7 +11,7 @@ namespace Vespolina\Sync\Entity;
 
 
 /**
- * An interface to manage the synchronization state per entity type
+ * An interface to manage the synchronization state per entity collection
  *
  * @author Daniel Kucharski <daniel@vespolina.org>
  */

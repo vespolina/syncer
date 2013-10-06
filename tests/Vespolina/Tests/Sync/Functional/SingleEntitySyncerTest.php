@@ -9,6 +9,7 @@
  
 namespace Vespolina\Tests\Functional;
 
+use Monolog\Logger;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -31,16 +32,18 @@ class SingleEntitySyncerTest extends \PHPUnit_Framework_TestCase
     {
         $this->dispatcher = new EventDispatcher();
         $this->gateway = new SyncMemoryGateway();
-        $this->manager = new SyncManager($this->gateway, $this->dispatcher, null);
+
+        $logger = new Logger('test');
+
+        $yamlParser = new Parser();
+        $config = $yamlParser->parse(file_get_contents(__DIR__ . '/single_entity.yml'));
+        $this->manager = new SyncManager($this->gateway, $this->dispatcher, $logger, $config['syncer']);
     }
 
     public function testSyncEntitiesFromOneRemoteService()
     {
         //Setup a remote service with some entities we want to locally sync
         $this->setupRemoteService();
-
-        //Setup the synchonization configuration
-        $this->setupConfiguration();
 
         //Setup (fake) the synchronization state
         $this->setSyncState();
@@ -55,14 +58,6 @@ class SingleEntitySyncerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($state->getLastValue(), 20);
 
     }
-
-    protected function setupConfiguration()
-    {
-        $yamlParser = new Parser();
-        $config = $yamlParser->parse(file_get_contents(__DIR__ . '/single_entity.yml'));
-
-    }
-
     protected function setSyncState()
     {
         $syncState = new SyncState('product');
