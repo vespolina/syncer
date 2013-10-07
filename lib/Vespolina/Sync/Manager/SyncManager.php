@@ -241,7 +241,15 @@ class SyncManager implements SyncManagerInterface
         $entityData = $serviceAdapter->fetchEntity($entityName, $remoteId);
 
         //Apply transformation and retrieve the local entity
-        return $this->transformEntityData($entityData, $serviceAdapter);
+        $localEntity = $this->transformEntityData($entityData, $serviceAdapter);
+
+        if (null != $localEntity) {
+            $this->logger->info('Resolved dependency ' . $entityName . ' "' . $remoteId . '"');
+        } else {
+            $this->logger->error('Failed to resolve dependency ' . $entityName . ' "' . $remoteId . '"');
+        }
+
+        return $localEntity;
     }
 
     /**
@@ -266,5 +274,7 @@ class SyncManager implements SyncManagerInterface
         if ($this->config['use_id_mapping']) {
             $this->maintainIdMapping($localEntity, $entityData);
         }
+
+        return $localEntity;
     }
 }
