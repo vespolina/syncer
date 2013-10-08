@@ -24,7 +24,7 @@ interface SyncManagerInterface
      * @param array $entityNames
      * @return mixed
      */
-    function execute(array $entityNames = array(), $package = 100);
+    function execute(array $entityNames = array(), $size = 0);
 
     /**
      * Retrieve the synchronisation state for the entity

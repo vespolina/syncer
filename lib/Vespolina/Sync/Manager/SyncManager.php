@@ -57,7 +57,7 @@ class SyncManager implements SyncManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function execute(array $entityNames = array(), $package = 10)
+    public function execute(array $entityNames = array(), $size = 0)
     {
         foreach ($entityNames as $entityName) {
 
@@ -71,7 +71,7 @@ class SyncManager implements SyncManagerInterface
             $this->logger->info('Fetching ' . $entityName . ' starting at "' . $lastValue . '"');
 
             // Fetch raw entity data after 'lastValue'
-            $entitiesData = $adapter->fetchEntities($entityName, $lastValue, $package);
+            $entitiesData = $adapter->fetchEntities($entityName, $lastValue, $size);
 
             // Analyze the collected entities
             $this->processEntityDataCollection($state, $entitiesData);
@@ -153,6 +153,7 @@ class SyncManager implements SyncManagerInterface
             }
 
             if (true == $resolved) {
+
                 // Transform the entity data into a real entity
                 $localEntity = $this->transformEntityData($entityData);
 
@@ -189,7 +190,7 @@ class SyncManager implements SyncManagerInterface
      */
     protected function processEntityDataCollectionDependencies($entityData, $unresolvedDependencies)
     {
-        $unresolved = false;
+        $resolved = true;
 
         foreach ($unresolvedDependencies as $entityName => $dependencyData)
         {
@@ -210,7 +211,7 @@ class SyncManager implements SyncManagerInterface
 
                     if (null == $localEntity) {
 
-                        $unresolved = true;
+                        $resolved = false;
                         // Persist this entity data for a later attempt
                         $this->gateway->updateEntityData($entityData);
                     }
@@ -224,7 +225,7 @@ class SyncManager implements SyncManagerInterface
             $entityData->setDependencyReference($entityName, $localEntity);
         }
 
-        return $unresolved;
+        return $resolved;
     }
 
     /**
