@@ -20,6 +20,7 @@ class EntityData
     protected $entityId;
     protected $data;
     protected $dependencies;
+    protected $id;
 
     public function __construct($entityName, $entityId, $data = null)
     {

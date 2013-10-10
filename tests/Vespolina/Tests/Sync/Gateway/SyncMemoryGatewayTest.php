@@ -12,20 +12,11 @@ namespace Vespolina\Tests\Sync\Gateway;
 use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Gateway\SyncMemoryGateway;
 
-class SyncMemoryGatewayTest extends \PHPUnit_Framework_TestCase
+class SyncMemoryGatewayTest extends SyncGatewayTestCommon
 {
-    /* @var $gateway Vespolina\Sync\Gateway\SyncMemoryGateway */
-    protected $gateway;
-
     protected function setUp()
     {
         $this->gateway = new SyncMemoryGateway();
-    }
-
-    public function testUpdateIdMapping()
-    {
-        $this->gateway->updateIdMapping('book', 'Local-1234', 'Amazone-567');
-        $this->assertEquals('Local-1234', $this->gateway->findLocalId('book', 'Amazone-567'));
     }
 
     public function testUpdateEntityData()
@@ -38,10 +29,5 @@ class SyncMemoryGatewayTest extends \PHPUnit_Framework_TestCase
         $prop->setAccessible(true);
 
         $this->assertTrue(array_key_exists($ed1->getKey(), $prop->getValue($this->gateway)));
-    }
-
-    public function testFindUnknownLocalId()
-    {
-        $this->assertEquals(null, $this->gateway->findLocalId('bookblablbla', 'Amazone-000'));
     }
 }
