@@ -21,6 +21,7 @@ class SyncManager implements SyncManagerInterface
 {
     protected $config;
     protected $dispatcher;
+    protected $localEntityRetrievers;
     protected $handlers;
     protected $gateway;
     protected $serviceAdaptersByEntityName;
@@ -29,6 +30,7 @@ class SyncManager implements SyncManagerInterface
     public function __construct(SyncGatewayInterface $gateway, EventDispatcherInterface $dispatcher, LoggerInterface $logger, $config = array())
     {
         $this->dispatcher = $dispatcher;
+        $this->localEntityRetrievers = array();
         $this->handlers = array();
         $this->logger = $logger;
         $this->gateway = $gateway;
@@ -41,6 +43,14 @@ class SyncManager implements SyncManagerInterface
 
         // Setup the default entity handler
         $this->handlers['default'] = new DefaultEntityHandler();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addLocalEntityRetriever($entityName, $retriever, $method = 'findId')
+    {
+        $this->localEntityRetrievers[$entityName] = array('retriever' => $retriever, 'method' => $method);
     }
 
     /**
@@ -115,6 +125,11 @@ class SyncManager implements SyncManagerInterface
         if ($this->config['use_id_mapping']) {
 
             $localEntityId = $this->gateway->findLocalId($entityName, $remoteId);
+
+            if (null != $localEntityId) {
+
+                return $this->retrieveLocalEntity($entityName, $localEntityId);
+            }
 
             return $localEntityId;  //Todo retrieve real entity but we don't need this yet
         }
@@ -229,7 +244,7 @@ class SyncManager implements SyncManagerInterface
     }
 
     /**
-     * Resolved and transform into a local entity for the given remote entity and id
+     * Resolved and transform into a new local entity for the given remote entity and id
      *
      * @param string $entityName
      * @param EntityData $remoteId
@@ -245,12 +260,31 @@ class SyncManager implements SyncManagerInterface
         $localEntity = $this->transformEntityData($entityData, $serviceAdapter);
 
         if (null != $localEntity) {
-            $this->logger->info('Resolved dependency ' . $entityName . ' "' . $remoteId . '"');
+            $this->logger->debug('Resolved dependency ' . $entityName . ' "' . $remoteId . '"');
         } else {
             $this->logger->error('Failed to resolve dependency ' . $entityName . ' "' . $remoteId . '"');
         }
 
         return $localEntity;
+    }
+
+
+    /**
+     * Retrieve a local entity
+     *
+     * @param $entityName
+     * @param $localId
+     */
+    protected function retrieveLocalEntity($entityName, $localId)
+    {
+        if (!array_key_exists($entityName, $this->localEntityRetrievers)) {
+            throw new \RuntimeException('No entity retriever defined for "' . $entityName . '"');
+        }
+
+        $retriever = $this->localEntityRetrievers[$entityName]['retriever'];
+        $method = $this->localEntityRetrievers[$entityName]['method'];
+
+        return $retriever->{$method}($localId);
     }
 
     /**

@@ -30,8 +30,12 @@ $syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $
 // Instantiate your own service adapter, for example to the ZOHO api
 $zohoServiceAdapter = new ZohoServiceAdapter($this->config, $this->logger);,
 
-//Register the service adapter.  The service adapter will indicate it supports the 'invoice' entity
+// Register the service adapter.  The service adapter will indicate it supports the 'invoice' entity
 $this->syncManager->addServiceAdapter($zohoInvoiceServiceAdapter);
+
+// Register a local object manager to retrieve local customer instances from the database.
+$this->syncManager->addLocalEntityRetriever('customer', $aCustomerManager, 'findById');
+
 
 //Start synchronisation for entity name 'invoice'
 $this->syncManager->execute(array('invoice'));
@@ -42,10 +46,11 @@ The service adapter needs to implement abstract methods *fetchEntities* , *fetch
 *fetchEntities* downloads the entities from a remote service and creates for each remote entity an EntityData instance.
 This instance contains the name of the entity (eg. 'invoice'), the remote identification (eg. zoho id '234324') and raw entity information (eg. xml or json data).
 
-The service adapter can then register additional dependencies to be resolved.  For instance the zoho invoice entity requires the zoho customer entity.
-
 When dependencies are detected by the sync manager it will first check if the dependency already exists in the local application.
 If this isn't the case the configured service adapter for the dependent remote entity will be used to retrieve and create the entity local.
+For instance the zoho invoice entity requires the zoho customer entity as well.
+Therefore the remote customer information needs to be retrieved first and a local customer instance needs to be created and persisted.  Only then the invoice can be created.
+
 
 The system can can directly resolve dependencies when detected or first store the partial data of the main entity (eg. 'invoice').
 
@@ -71,10 +76,6 @@ Delay resolving dependencies:
 9. When local 'customer' and 'product entities have been created, use that to create the invoice entity
 
 Having all dependencies resolved the requested entity (eg 'invoice') is created using the *transformEntityData* method of the service adapter.
-
-
-
-
 
 
 For the install guide and reference, see:

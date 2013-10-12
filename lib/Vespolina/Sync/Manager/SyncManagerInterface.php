@@ -10,6 +10,7 @@
 namespace Vespolina\Sync\Manager;
 
 use Vespolina\Sync\Entity\SyncStateInterface;
+use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
 
 /**
  * An interface to manage the synchronization state
@@ -18,6 +19,25 @@ use Vespolina\Sync\Entity\SyncStateInterface;
  */
 interface SyncManagerInterface
 {
+
+    /**
+     * Register a local entity retriever
+     *
+     * @param string $entityName
+     * @param $retriever  Manager or gateway to retrieve the entity
+     * @param string $method The method which will be called to retrieve the entity when the id passed
+     * @return mixed
+     */
+    function addLocalEntityRetriever($entityName, $retriever, $method = 'findId');
+
+    /**
+     * Register a service adapter
+     *
+     * @param ServiceAdapterInterface $serviceAdapter
+     * @return mixed
+     */
+    function addServiceAdapter(ServiceAdapterInterface $serviceAdapter);
+
     /**
      * Execute synchronization for the given list of entities
      *
