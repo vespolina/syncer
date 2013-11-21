@@ -69,6 +69,4 @@ class IdMap
     {
         return $this->remoteServiceName;
     }
-
-
 }

@@ -13,18 +13,9 @@ use Monolog\Logger;
 use Monolog\Handler\TestHandler;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-
-use Vespolina\Sync\Entity\SyncState;
 use Vespolina\Sync\Gateway\SyncMemoryGateway;
 use Vespolina\Sync\Manager\SyncManager;
 
-use Vespolina\Tests\Sync\Functional\Entity\RemoteProduct;
-use Vespolina\Tests\Sync\Functional\Entity\RemoteProductCategory;
-use Vespolina\Tests\Sync\Functional\Entity\LocalProductCategory;
-
-
-/**
- */
 class SyncEntitiesWithResumeTest extends \PHPUnit_Framework_TestCase
 {
     protected $logHandler;

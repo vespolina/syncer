@@ -12,9 +12,7 @@ namespace Vespolina\Tests\Sync\Gateway;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
-use Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver;
 use Vespolina\Sync\Gateway\SyncDoctrineMongoDBGateway;
-
 
 class SyncDoctrineODMGatewayTest extends SyncGatewayTestCommon
 {

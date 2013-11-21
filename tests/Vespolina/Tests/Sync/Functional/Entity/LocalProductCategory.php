@@ -13,7 +13,8 @@ class LocalProductCategory
 {
     public $name;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->name;
     }
 }

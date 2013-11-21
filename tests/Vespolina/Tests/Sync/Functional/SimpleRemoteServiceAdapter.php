@@ -1,10 +1,10 @@
 <?php
+
 /**
- * Created by JetBrains PhpStorm.
- * User: inspiran
- * Date: 08/10/13
- * Time: 22:06
- * To change this template use File | Settings | File Templates.
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Vespolina\Tests\Sync\Functional;
@@ -13,19 +13,16 @@ use Vespolina\Sync\ServiceAdapter\AbstractServiceAdapter;
 use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Tests\Sync\Functional\Entity\LocalProduct;
 use Vespolina\Tests\Sync\Functional\Entity\LocalProductCategory;
-
 use Vespolina\Tests\Sync\Functional\Entity\RemoteProduct;
 use Vespolina\Tests\Sync\Functional\Entity\RemoteProductCategory;
-
 
 /**
  * A simple remote service adapter faking the retrieval of external entities
  * , eg. in the real world it might be an adaptor to web services
  * such as Zoho, Magento Go, ...
  *
- * This dummy test provider supports the synchronization of remote products and associated product category
- * Class SimpleRemoteServiceAdapter
- * @package Vespolina\Tests\Functional
+ * This dummy test provider supports the synchronization of remote products
+ * and associated product category
  */
 class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 {
@@ -36,30 +33,33 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 
     public function addProduct($remoteProduct)
     {
-        if (null == $this->remoteProducts) $this->remoteProducts = array();
+        if (null == $this->remoteProducts) {
+            $this->remoteProducts = array();
+        }
         $this->remoteProducts[$remoteProduct->id] = $remoteProduct;
     }
 
     public function addProductCategory($remoteProductCategory)
     {
-        if (null == $this->remoteCategories) $this->remoteCategories = array();
+        if (null == $this->remoteCategories) {
+            $this->remoteCategories = array();
+        }
         $this->remoteCategories[$remoteProductCategory->name] = $remoteProductCategory;
     }
 
     public function setupFakeData()
     {
         for ($i = 1; $i <= 20;$i++) {
-
-            //Create a remote product category
+            // Create a remote product category
             $cat = new RemoteProductCategory();
             $cat->name = 'cat' . $i;
             $this->addProductCategory($cat);
 
-            //The primary object we will be syncing
+            // The primary object we will be syncing
             $remoteProduct = new RemoteProduct();
             $remoteProduct->id = $i;
 
-            //Setup a depending object requiring individual  syncing
+            // Setup a depending object requiring individual  syncing
             $remoteProduct->category = $cat;
 
             $this->addProduct($remoteProduct);
@@ -68,7 +68,7 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 
     public function fetchEntity($entityName, $remoteId)
     {
-        switch($entityName) {
+        switch ($entityName) {
             case 'product':
                 if (array_key_exists($remoteId, $this->remoteProducts)) {
 
@@ -90,7 +90,7 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 
         switch($entityName) {
             case 'product':
-                //Simple naive implementation comparing the entity id
+                // Simple naive implementation comparing the entity id
                 foreach ($this->remoteProducts as $remoteProduct) {
 
                     if (null != $size && count($out) == $size) return $out;
@@ -98,7 +98,7 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
                     if ($remoteProduct->id > $lastValue || null == $lastValue) {
                         $ed = new EntityData($entityName, $remoteProduct->id);
 
-                        //Indicate to the sync manager that we need the category dependency
+                        // Indicate to the sync manager that we need the category dependency
                         $ed->addDependency('category', 'cat' . $remoteProduct->id);
                         $out[] = $ed;
                     }

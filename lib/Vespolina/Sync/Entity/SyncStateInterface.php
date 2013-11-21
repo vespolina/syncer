@@ -9,7 +9,6 @@
 
 namespace Vespolina\Sync\Entity;
 
-
 /**
  * An interface to manage the synchronization state per entity collection
  *
@@ -17,6 +16,4 @@ namespace Vespolina\Sync\Entity;
  */
 interface SyncStateInterface
 {
-
-
 }

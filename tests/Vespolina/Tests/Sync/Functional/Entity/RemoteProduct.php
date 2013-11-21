@@ -9,7 +9,8 @@
  
 namespace Vespolina\Tests\Sync\Functional\Entity;
 
-class RemoteProduct{
+class RemoteProduct
+{
     public $id;
     public $category;
 }

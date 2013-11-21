@@ -13,12 +13,9 @@ use Monolog\Logger;
 use Monolog\Handler\TestHandler;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-
 use Vespolina\Sync\Gateway\SyncMemoryGateway;
 use Vespolina\Sync\Manager\SyncManager;
 
-/**
- */
 class SyncEntitiesWithDependencyTest extends \PHPUnit_Framework_TestCase
 {
     protected $dispatcher;
@@ -39,7 +36,7 @@ class SyncEntitiesWithDependencyTest extends \PHPUnit_Framework_TestCase
         $config = $yamlParser->parse(file_get_contents(__DIR__ . '/single_entity.yml'));
         $this->manager = new SyncManager($this->gateway, $this->dispatcher, $logger, $config['syncer']);
 
-        //Create a remote service adapter which can deal with products
+        // Create a remote service adapter which can deal with products
         $this->remoteServiceAdapter = new SimpleRemoteServiceAdapter(array('category', 'product'));
         $this->remoteServiceAdapter->setupFakeData();
 

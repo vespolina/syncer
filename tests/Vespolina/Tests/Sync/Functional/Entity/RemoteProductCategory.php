@@ -13,5 +13,3 @@ class RemoteProductCategory
 {
     public $name;
 }
-
-

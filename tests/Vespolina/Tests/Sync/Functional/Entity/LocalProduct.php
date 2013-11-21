@@ -14,7 +14,8 @@ class LocalProduct
     public $id;
     public $category;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 }
