@@ -51,15 +51,14 @@ If this isn't the case the configured service adapter for the dependent remote e
 For instance the zoho invoice entity requires the zoho customer entity as well.
 Therefore the remote customer information needs to be retrieved first and a local customer instance needs to be created and persisted.  Only then the invoice can be created.
 
-
-The system can can directly resolve dependencies when detected or first store the partial data of the main entity (eg. 'invoice').
+The system can directly resolve dependencies when detected or first store the partial data of the main entity (eg. 'invoice').
 
 Resolve dependencies inmediately:
 
 1. For each remote invoice
 2. Register partial invoice data in EntityData,
 3. Resolve dependent remote entity 'customer' 12313
-3. Resolve dependent remote entity 'product' 222 qnd 'product' 333
+3. Resolve dependent remote entity 'product' 222 and 'product' 333
 4. When local 'customer' and 'product entities have been created, use that to create the invoice entity
 5. End for each remote invoice
 
