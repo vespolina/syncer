@@ -23,7 +23,7 @@ None ;-)
 
 Example usage
 
-```
+```php
 // Create a new manager and persist data in memory
 $syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $this->logger );
 
