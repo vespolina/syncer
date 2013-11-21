@@ -15,7 +15,7 @@ interface EntityHandlerInterface
      * @param $entity
      * @return Boolean
      */
-    function hasDependencies($entity);
+    public function hasDependencies($entity);
 
     /**
      * Emit the request to resolve dependencies
@@ -23,13 +23,13 @@ interface EntityHandlerInterface
      * @param $entity
      * @return mixed List of dependencies to be resolved
      */
-    function emit($entity);
+    public function emit($entity);
 
     /**
      * Merge resolved dependencies for the entity
      *
-     * @param array $resolvedDependencies
+     * @param  array $resolvedDependencies
      * @return mixed
      */
-    function merge(array $resolvedDependencies);
+    public function merge(array $resolvedDependencies);
 }

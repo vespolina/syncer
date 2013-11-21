@@ -9,9 +9,7 @@
 
 namespace Vespolina\Tests\Sync\Gateway;
 
-use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\SyncState;
-use Vespolina\Sync\Gateway\SyncMemoryGateway;
 
 abstract class SyncGatewayTestCommon extends \PHPUnit_Framework_TestCase
 {

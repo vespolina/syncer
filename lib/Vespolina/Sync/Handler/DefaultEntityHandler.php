@@ -14,11 +14,11 @@ class DefaultEntityHandler implements EntityHandlerInterface
         return false;
     }
 
-    function emit($entity)
+    public function emit($entity)
     {
     }
 
-    function merge(array $resolvedDependencies)
+    public function merge(array $resolvedDependencies)
     {
     }
 }

@@ -71,13 +71,11 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
         switch ($entityName) {
             case 'product':
                 if (array_key_exists($remoteId, $this->remoteProducts)) {
-
                     return new EntityData($entityName, $remoteId, '<xml>...blablabla...</xml>');
                 }
                 break;
             case 'category':
                 if (array_key_exists($remoteId, $this->remoteCategories)) {
-
                     return new EntityData($entityName, $remoteId, '<xml>...blablabla...</xml>');
                 }
                 break;
@@ -88,7 +86,7 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
     {
         $out = array();
 
-        switch($entityName) {
+        switch ($entityName) {
             case 'product':
                 // Simple naive implementation comparing the entity id
                 foreach ($this->remoteProducts as $remoteProduct) {
@@ -121,12 +119,13 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 
     public function transformEntityData(EntityData $entityData)
     {
-        switch($entityData->getEntityName()) {
+        switch ($entityData->getEntityName()) {
             case 'product':
                 $product = new LocalProduct();
                 $product->id = 'local' . $entityData->getEntityId();   //In reality the local persistence gateway would generate local id
 
                 $product->category = $entityData->getDependencyReference('category');
+
                 return $product;
 
             case 'category':

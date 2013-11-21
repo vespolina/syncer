@@ -8,7 +8,7 @@ namespace Vespolina\Entity\Identity;
  */
 interface IdentityInterface
 {
-    function getVendor();
+    public function getVendor();
 
-    function getUsername();
+    public function getUsername();
 }

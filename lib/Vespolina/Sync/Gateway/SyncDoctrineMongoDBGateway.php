@@ -23,9 +23,9 @@ class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
 
     /**
      * @param DocumentManager $dm
-     * @param string $entityDataClass
-     * @param string $stateClass
-     * @param string $idMapClass
+     * @param string          $entityDataClass
+     * @param string          $stateClass
+     * @param string          $idMapClass
      */
     public function __construct(
         DocumentManager $dm,
