@@ -13,7 +13,7 @@ use Vespolina\Sync\Entity\SyncState;
 
 abstract class SyncGatewayTestCommon extends \PHPUnit_Framework_TestCase
 {
-    /* @var $gateway \Vespolina\Sync\Gateway\SyncMemoryGatewayInterface */
+    /* @var $gateway \Vespolina\Sync\Gateway\SyncMemoryGateway */
     protected $gateway;
 
     public function testUpdateIdMapping()
