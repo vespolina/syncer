@@ -10,7 +10,7 @@
 namespace Vespolina\Sync\Entity;
 
 /**
- * An class to manage the synchronization of a given entity
+ * A class to manage the synchronization of a given entity
  *
  * @author Daniel Kucharski <daniel@vespolina.org>
  */
@@ -28,7 +28,6 @@ class EntityData
         $this->data = $data;
         $this->entityName = $entityName;
         $this->entityId = $entityId;
-
     }
 
     public function addDependency($entityName, $data, $reference = null)

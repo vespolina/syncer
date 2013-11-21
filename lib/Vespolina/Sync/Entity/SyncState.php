@@ -10,7 +10,7 @@
 namespace Vespolina\Sync\Entity;
 
 /**
- * An class to manage the synchronization state of a collection of entities of the same type
+ * A class to manage the synchronization state of a collection of entities of the same type
  *
  * @author Daniel Kucharski <daniel@vespolina.org>
  */
