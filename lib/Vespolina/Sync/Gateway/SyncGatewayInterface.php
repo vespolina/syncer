@@ -32,12 +32,12 @@ interface SyncGatewayInterface
      * Retrieve the current state for the specified entity name
      *
      * @param $entityName
-     * @return Vespolina\Sync\Entity\SyncState
+     * @return \Vespolina\Sync\Entity\SyncState
      */
     function findStateByEntityName($entityName);
 
     /**
-     * Update the id mapping between the local entity id and remote entity id
+     * Update the id mapping between the local entity id and the remote entity id
      *
      * @param $entityName
      * @param $localId

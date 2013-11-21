@@ -16,4 +16,8 @@ namespace Vespolina\Sync\Entity;
  */
 interface SyncStateInterface
 {
+    /**
+     * @return mixed
+     */
+    public function getEntityName();
 }

@@ -50,7 +50,7 @@ class SyncState implements SyncStateInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getEntityName()
     {

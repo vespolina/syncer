@@ -13,7 +13,7 @@ use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\SyncStateInterface;
 
 /**
- * An class to manage the synchronization state in memory
+ * A class to manage the synchronization state in memory
  *
  * @author Daniel Kucharski <danie@vespolina.org>
  */
@@ -36,11 +36,11 @@ class SyncMemoryGateway implements SyncGatewayInterface
     public function findLocalId($entityName, $remoteId)
     {
         if (!array_key_exists($entityName, $this->idMapping)) {
-            return;
+            return null;
         }
 
         if (!array_key_exists($remoteId, $this->idMapping[$entityName])) {
-            return;
+            return null;
         }
 
         return $this->idMapping[$entityName][$remoteId];
@@ -52,7 +52,6 @@ class SyncMemoryGateway implements SyncGatewayInterface
     public function findStateByEntityName($entityName)
     {
         if (array_key_exists($entityName, $this->data)) {
-
             return $this->data[$entityName];
         }
 
