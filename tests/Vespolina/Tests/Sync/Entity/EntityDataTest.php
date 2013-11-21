@@ -13,7 +13,6 @@ use Vespolina\Sync\Entity\EntityData;
 
 class EntityDataTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testConstructor()
     {
         $entityData = new EntityData('book', '12345', '<xml>...</xml>');
@@ -26,13 +25,13 @@ class EntityDataTest extends \PHPUnit_Framework_TestCase
     public function testAddResolvedDependency()
     {
         $entityData = new EntityData('book', '12345', '<xml>...</xml>');
-        $entityData->addDependency('author', '9876', 'referencingobject');
+        $entityData->addDependency('author', '9876', 'referencingObject');
 
-        //Test if the dependency is existent
+        // Tests if the dependency is existent
         foreach ($entityData->getDependencies() as $entityName => $dependency) {
             $this->assertEquals('author', $entityName);
             $this->assertEquals('9876', $dependency['data']);
-            $this->assertEquals('referencingobject', $dependency['reference']);
+            $this->assertEquals('referencingObject', $dependency['reference']);
         };
     }
 
@@ -41,10 +40,11 @@ class EntityDataTest extends \PHPUnit_Framework_TestCase
         $entityData = new EntityData('book', '12345', '<xml>...</xml>');
         $entityData->addDependency('author', '9876');
 
-        //Test if the dependency is existent
+        // Tests if the dependency is existent
         foreach ($entityData->getUnresolvedDependencies() as $entityName => $dependency) {
             $this->assertEquals('author', $entityName);
             $this->assertEquals('9876', $dependency['data']);
+            $this->assertNull($dependency['reference']);
         };
     }
 
