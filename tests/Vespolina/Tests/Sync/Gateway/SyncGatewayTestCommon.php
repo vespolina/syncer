@@ -16,6 +16,11 @@ abstract class SyncGatewayTestCommon extends \PHPUnit_Framework_TestCase
     /* @var $gateway \Vespolina\Sync\Gateway\SyncMemoryGateway */
     protected $gateway;
 
+    public function setUp()
+    {
+        // some common logic to sync gateway implementations
+    }
+
     public function testUpdateIdMapping()
     {
         $this->gateway->updateIdMapping('book', 'Local-1234', 'Amazone-567');

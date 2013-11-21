@@ -14,7 +14,7 @@ use Vespolina\Sync\Gateway\SyncMemoryGateway;
 
 class SyncMemoryGatewayTest extends SyncGatewayTestCommon
 {
-    protected function setUp()
+    public function setUp()
     {
         $this->gateway = new SyncMemoryGateway();
     }

@@ -11,14 +11,16 @@ namespace Vespolina\Tests\Sync\Gateway;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
+use Doctrine\ODM\MongoDB\Configuration;
 use Vespolina\Sync\Gateway\SyncDoctrineMongoDBGateway;
 
 class SyncDoctrineODMGatewayTest extends SyncGatewayTestCommon
 {
-    protected function setUp()
+    public function setUp()
     {
-        $config = new \Doctrine\ODM\MongoDB\Configuration();
+        $config = new Configuration();
         $config->setHydratorDir(sys_get_temp_dir());
         $config->setHydratorNamespace('Hydrators');
         $config->setProxyDir(sys_get_temp_dir());
@@ -36,7 +38,7 @@ class SyncDoctrineODMGatewayTest extends SyncGatewayTestCommon
         $config->setMetadataDriverImpl($xmlDriver);
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
-        $doctrineODM = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
+        $doctrineODM = DocumentManager::create(null, $config);
         $this->gateway = new SyncDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Action\Action');
 
         parent::setUp();
