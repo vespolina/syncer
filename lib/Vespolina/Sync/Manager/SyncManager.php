@@ -70,7 +70,6 @@ class SyncManager implements SyncManagerInterface
     public function execute(array $entityNames = array(), $size = 0)
     {
         foreach ($entityNames as $entityName) {
-
             //Prepare synchronization, retrieve the last key value we retrieved
             $state = $this->getState($entityName);
             $lastValue = $state->getLastValue();
@@ -94,9 +93,7 @@ class SyncManager implements SyncManagerInterface
     public function getServiceAdapter($entityName)
     {
         if (array_key_exists($entityName, $this->serviceAdaptersByEntityName)) {
-
             return $this->serviceAdaptersByEntityName[$entityName];
-
         } else {
             throw new \RuntimeException('No service adapter available for entity ' . $entityName);
         }
@@ -131,7 +128,7 @@ class SyncManager implements SyncManagerInterface
                 return $this->retrieveLocalEntity($entityName, $localEntityId);
             }
 
-            return $localEntityId;  //Todo retrieve real entity but we don't need this yet
+            return $localEntityId;  // Todo retrieve real entity but we don't need this yet
         }
     }
 
@@ -153,12 +150,13 @@ class SyncManager implements SyncManagerInterface
      */
     protected function processEntityDataCollection(SyncState $state, array $entitiesData)
     {
-        if (count($entitiesData) == 0) return;
+        if (count($entitiesData) == 0) {
+            return;
+        }
 
         $allEntitiesResolved = false;
 
         foreach ($entitiesData as $entityData) {
-
             $resolved = true;
 
             // If an entity requires dependencies, initiate dependency resolving
@@ -168,10 +166,8 @@ class SyncManager implements SyncManagerInterface
             }
 
             if (true == $resolved) {
-
                 // Transform the entity data into a real entity
                 $localEntity = $this->transformEntityData($entityData);
-
             } else {
                 $allEntitiesResolved = false;
                 // Add to queue
@@ -179,7 +175,7 @@ class SyncManager implements SyncManagerInterface
             }
         }
 
-        //Get the last entity
+        // Get the last entity
         $lastEntityData = end($entitiesData);
 
         $state->setLastValue($lastEntityData->getEntityId());  //TODO: use config
@@ -201,14 +197,13 @@ class SyncManager implements SyncManagerInterface
      * 
      * @param $entityData
      * @param $unresolvedDependencies
-     * @return bool
+     * @return Boolean
      */
     protected function processEntityDataCollectionDependencies($entityData, $unresolvedDependencies)
     {
         $resolved = true;
 
-        foreach ($unresolvedDependencies as $entityName => $dependencyData)
-        {
+        foreach ($unresolvedDependencies as $entityName => $dependencyData) {
             // Get the remote identifier for this dependency (eg. for an order the dependency
             // 'customer' would could have remote id 1239
             $remoteId = (string)$dependencyData['data'];
@@ -225,12 +220,10 @@ class SyncManager implements SyncManagerInterface
                     $localEntity = $this->resolveRemoteEntity($entityName, $remoteId);
 
                     if (null == $localEntity) {
-
                         $resolved = false;
                         // Persist this entity data for a later attempt
                         $this->gateway->updateEntityData($entityData);
                     }
-
                 } else {
                    // Register the request to the entity queue  with the remote id and referencing entity
                     $this->queues[$entityName] = array($remoteId, $entityData);
@@ -248,6 +241,7 @@ class SyncManager implements SyncManagerInterface
      *
      * @param string $entityName
      * @param EntityData $remoteId
+     * @return mixed
      */
     protected function resolveRemoteEntity($entityName, $remoteId)
     {
@@ -274,6 +268,8 @@ class SyncManager implements SyncManagerInterface
      *
      * @param $entityName
      * @param $localId
+     * @throws \RuntimeException
+     * @return
      */
     protected function retrieveLocalEntity($entityName, $localId)
     {
@@ -294,6 +290,7 @@ class SyncManager implements SyncManagerInterface
      *
      * @param EntityData $entityData
      * @param ServiceAdapterInterface $serviceAdapter
+     * @return mixed
      */
     protected function transformEntityData(EntityData $entityData, ServiceAdapterInterface $serviceAdapter = null) {
 

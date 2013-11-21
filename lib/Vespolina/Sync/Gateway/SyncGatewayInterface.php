@@ -19,7 +19,6 @@ use Vespolina\Sync\Entity\SyncStateInterface;
  */
 interface SyncGatewayInterface
 {
-
     /**
      * Find the local id for the remote id identified by remote id
      *
@@ -46,13 +45,13 @@ interface SyncGatewayInterface
      */
     function updateIdMapping($entityName, $localId, $remoteId);
 
-
     /**
      * Create or update an entity data instance
      *
      * @param EntityData $entityData
      */
     function updateEntityData(EntityData $entityData);
+
     /**
      * Update the synchronisation state of an entity collection
      *

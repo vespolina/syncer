@@ -33,7 +33,7 @@ interface ServiceAdapterInterface
      *
      * @param $entityName
      * @param $remoteId
-     * @return Vespolina\Sync\Entity\EntityData
+     * @return \Vespolina\Sync\Entity\EntityData
      */
     function fetchEntity($entityName, $remoteId);
 
@@ -61,5 +61,4 @@ interface ServiceAdapterInterface
      * @return mixed
      */
     function transformEntityData(EntityData $entityData);
-
 }

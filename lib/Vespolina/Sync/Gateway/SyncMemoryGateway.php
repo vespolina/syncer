@@ -35,13 +35,15 @@ class SyncMemoryGateway implements SyncGatewayInterface
      */
     public function findLocalId($entityName, $remoteId)
     {
-        if (!array_key_exists($entityName, $this->idMapping))
+        if (!array_key_exists($entityName, $this->idMapping)) {
             return;
+        }
 
-        if (!array_key_exists($remoteId, $this->idMapping[$entityName]))
+        if (!array_key_exists($remoteId, $this->idMapping[$entityName])) {
             return;
+        }
+
         return $this->idMapping[$entityName][$remoteId];
-
     }
 
     /**
@@ -53,6 +55,8 @@ class SyncMemoryGateway implements SyncGatewayInterface
 
             return $this->data[$entityName];
         }
+
+        return null;
     }
 
     /**
@@ -88,8 +92,6 @@ class SyncMemoryGateway implements SyncGatewayInterface
      */
     public function updateState(SyncStateInterface $syncState)
     {
-
         $this->data[$syncState->getEntityName()] = $syncState;
     }
-
 }

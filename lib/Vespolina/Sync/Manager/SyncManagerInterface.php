@@ -24,7 +24,7 @@ interface SyncManagerInterface
      * Register a local entity retriever
      *
      * @param string $entityName
-     * @param $retriever  Manager or gateway to retrieve the entity
+     * @param $retriever Manager or gateway to retrieve the entity
      * @param string $method The method which will be called to retrieve the entity when the id passed
      * @return mixed
      */
@@ -42,6 +42,7 @@ interface SyncManagerInterface
      * Execute synchronization for the given list of entities
      *
      * @param array $entityNames
+     * @param integer $size
      * @return mixed
      */
     function execute(array $entityNames = array(), $size = 0);
