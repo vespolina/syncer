@@ -19,7 +19,7 @@ use Vespolina\Tests\Sync\Functional\Entity\RemoteProductCategory;
 /**
  * A simple remote service adapter faking the retrieval of external entities
  * , eg. in the real world it might be an adaptor to web services
- * such as Zoho, Magento Go, ...
+ * such as Zoho, Magento Go, Authorize.net APIs, etc.
  *
  * This dummy test provider supports the synchronization of remote products
  * and associated product category
@@ -49,7 +49,7 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 
     public function setupFakeData()
     {
-        for ($i = 1; $i <= 20;$i++) {
+        for ($i = 1; $i <= 20; $i++) {
             // Create a remote product category
             $cat = new RemoteProductCategory();
             $cat->name = 'cat' . $i;
@@ -79,6 +79,8 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
                     return new EntityData($entityName, $remoteId, '<xml>...blablabla...</xml>');
                 }
                 break;
+            default:
+                throw new \Exception('this should never be reached');
         }
     }
 
@@ -90,8 +92,9 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
             case 'product':
                 // Simple naive implementation comparing the entity id
                 foreach ($this->remoteProducts as $remoteProduct) {
-
-                    if (null != $size && count($out) == $size) return $out;
+                    if (null != $size && count($out) == $size) {
+                        return $out;
+                    }
 
                     if ($remoteProduct->id > $lastValue || null == $lastValue) {
                         $ed = new EntityData($entityName, $remoteProduct->id);
@@ -106,8 +109,9 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
             case 'category':
                 // Even more naive
                 foreach ($this->remoteCategories as $remoteCat) {
-
-                    if (null != $size && count($out) == $size) return $out;
+                    if (null != $size && count($out) == $size) {
+                        return $out;
+                    }
 
                     $out[] = new EntityData($entityName, $remoteCat->name);
                 }
@@ -122,7 +126,8 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
         switch ($entityData->getEntityName()) {
             case 'product':
                 $product = new LocalProduct();
-                $product->id = 'local' . $entityData->getEntityId();   //In reality the local persistence gateway would generate local id
+                // In reality the local persistence gateway would generate the local id
+                $product->id = 'local' . $entityData->getEntityId();
 
                 $product->category = $entityData->getDependencyReference('category');
 
@@ -130,9 +135,12 @@ class SimpleRemoteServiceAdapter extends AbstractServiceAdapter
 
             case 'category':
                 $cat = new LocalProductCategory();
-                $cat->name = $entityData->getEntityId();   //In reality the local persistence gateway would generate local id
+                // In reality the local persistence gateway would generate the local id
+                $cat->name = $entityData->getEntityId();
 
                 return $cat;
+            default:
+                throw new \Exception('this should never be reached');
         }
     }
 }
