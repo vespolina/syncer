@@ -44,6 +44,7 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
     {
         $qb = $this->em->createQueryBuilder();
         $idMap = $qb
+                ->select('i')
                 ->from($this->idMapClass, 'i')
                 ->where($qb->expr()->andX(
                     $qb->expr()->eq('i.entityName', $entityName),
@@ -66,6 +67,7 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         $qb = $this->em->createQueryBuilder();
 
         return $qb
+            ->select('s')
             ->from($this->stateClass, 's')
             ->where($qb->expr()->eq('s.entityName', $entityName))
             ->getQuery()

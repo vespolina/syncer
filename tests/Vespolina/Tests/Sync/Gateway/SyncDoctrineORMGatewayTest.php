@@ -9,20 +9,23 @@
 
 namespace Vespolina\Tests\Sync\Gateway;
 
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
-use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Tools\Setup;
 use Vespolina\Sync\Gateway\SyncDoctrineORMGateway;
 
 class SyncDoctrineORMGatewayTest extends SyncGatewayTestCommon
 {
     public function setUp()
     {
-        $config = new Configuration();
-        $config->setProxyDir(sys_get_temp_dir());
-        $config->setProxyNamespace('Proxies');
+        $dbParams = array(
+            'driver'   => 'pdo_sqlite',
+            'user'     => 'root',
+            'password' => '',
+            'dbname'   => 'foo',
+            'path'     => __DIR__.'/fixture.sqlite',
+        );
 
         $locatorXml = new SymfonyFileLocator(
             array(
@@ -31,13 +34,10 @@ class SyncDoctrineORMGatewayTest extends SyncGatewayTestCommon
             '.orm.xml'
         );
 
-        $xmlDriver = new XmlDriver($locatorXml);
-
-        $config->setMetadataDriverImpl($xmlDriver);
-        $config->setMetadataCacheImpl(new ArrayCache());
-        $config->setAutoGenerateProxyClasses(true);
-        $doctrineORM = EntityManager::create(null, $config);
-        $this->gateway = new SyncDoctrineORMGateway($doctrineORM, 'Vespolina\Entity\Action\Action');
+        $config = Setup::createConfiguration();
+        $config->setMetadataDriverImpl(new XmlDriver($locatorXml));
+        $em = EntityManager::create($dbParams, $config);
+        $this->gateway = new SyncDoctrineORMGateway($em, 'Vespolina\Entity\Action\Action');
 
         parent::setUp();
     }
