@@ -23,22 +23,21 @@ None ;-)
 
 Example usage
 
-```
+```php
 // Create a new manager and persist data in memory
 $syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $this->logger );
 
-// Instantiate your own service adapter, for example to the ZOHO api
+// Instantiate your own service adapter, for example for the ZOHO api
 $zohoServiceAdapter = new ZohoServiceAdapter($this->config, $this->logger);,
 
 // Register the service adapter.  The service adapter will indicate it supports the 'invoice' entity
-$this->syncManager->addServiceAdapter($zohoInvoiceServiceAdapter);
+$syncManager->addServiceAdapter($zohoServiceAdapter);
 
-// Register a local object manager to retrieve local customer instances from the database.
-$this->syncManager->addLocalEntityRetriever('customer', $aCustomerManager, 'findById');
+// Register a local object manager to retrieve local customer instances from the database
+$syncManager->addLocalEntityRetriever('customer', $customerManager, 'findById');
 
-
-//Start synchronisation for entity name 'invoice'
-$this->syncManager->execute(array('invoice'));
+// Start synchronisation for entity name 'invoice'
+$syncManager->execute(array('invoice'));
 ```
 
 The service adapter needs to implement abstract methods *fetchEntities* , *fetchEntity* and *transformEntityData*.
