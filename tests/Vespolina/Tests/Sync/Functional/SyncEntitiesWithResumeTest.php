@@ -48,7 +48,7 @@ class SyncEntitiesWithResumeTest extends \PHPUnit_Framework_TestCase
         // Initially nothing should have yet been synced
         $state = $this->manager->getState('product');
 
-        //Get the last key value, should be initially null
+        // Get the last key value, should be initially null
         $this->assertNull($state->getLastValue());
 
         // SYNC 1 : get the first 2 products
@@ -59,13 +59,13 @@ class SyncEntitiesWithResumeTest extends \PHPUnit_Framework_TestCase
 
         // SYNC 2 : get the next six products
         $this->manager->execute(array('product'), 6);
-        $this->assertEquals($state->getLastValue(), 8);
+        $this->assertEquals($state->getLastValue(), 8, 'now 6 more, that is 8');
 
         // SYNC 3 : get the rest of the products
         $this->manager->execute(array('product'), 222222);
-        $this->assertEquals($state->getLastValue(), 20);
+        $this->assertEquals($state->getLastValue(), 20, '20 total products synced');
 
         // Verify that the log does not contain any issues
-        $this->assertFalse($this->logHandler->hasErrorRecords(), 'Sync should not have any errors');
+        $this->assertFalse($this->logHandler->hasErrorRecords(), 'Sync logs should not have any errors');
     }
 }
