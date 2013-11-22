@@ -42,10 +42,12 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
 
     public function findLocalId($entityName, $remoteId)
     {
-        $qb = $this->em->createQueryBuilder($this->idMapClass);
-        $idMap = $qb->where($qb->expr()->andX(
-                    $qb->expr()->eq('entityName', $entityName),
-                    $qb->expr()->eq('remoteId', $remoteId)
+        $qb = $this->em->createQueryBuilder();
+        $idMap = $qb
+                ->from($this->idMapClass, 'i')
+                ->where($qb->expr()->andX(
+                    $qb->expr()->eq('i.entityName', $entityName),
+                    $qb->expr()->eq('i.remoteId', $remoteId)
                 )
             )
             ->getQuery()
@@ -61,9 +63,11 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
 
     public function findStateByEntityName($entityName)
     {
-        $qb = $this->em->createQueryBuilder($this->stateClass);
+        $qb = $this->em->createQueryBuilder();
 
-        return $qb->where($qb->expr()->eq('entityName', $entityName))
+        return $qb
+            ->from($this->stateClass, 's')
+            ->where($qb->expr()->eq('s.entityName', $entityName))
             ->getQuery()
             ->getSingleResult()
         ;
