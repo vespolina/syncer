@@ -6,7 +6,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Vespolina\Sync\Manager;
 
 use Psr\Log\LoggerInterface;
@@ -70,7 +70,6 @@ class SyncManager implements SyncManagerInterface
     public function execute(array $entityNames = array(), $size = 0)
     {
         foreach ($entityNames as $entityName) {
-
             //Prepare synchronization, retrieve the last key value we retrieved
             $state = $this->getState($entityName);
             $lastValue = $state->getLastValue();
@@ -94,9 +93,7 @@ class SyncManager implements SyncManagerInterface
     public function getServiceAdapter($entityName)
     {
         if (array_key_exists($entityName, $this->serviceAdaptersByEntityName)) {
-
             return $this->serviceAdaptersByEntityName[$entityName];
-
         } else {
             throw new \RuntimeException('No service adapter available for entity ' . $entityName);
         }
@@ -127,11 +124,10 @@ class SyncManager implements SyncManagerInterface
             $localEntityId = $this->gateway->findLocalId($entityName, $remoteId);
 
             if (null != $localEntityId) {
-
                 return $this->retrieveLocalEntity($entityName, $localEntityId);
             }
 
-            return $localEntityId;  //Todo retrieve real entity but we don't need this yet
+            return $localEntityId;  // Todo retrieve real entity but we don't need this yet
         }
     }
 
@@ -149,16 +145,17 @@ class SyncManager implements SyncManagerInterface
      * been yet retrieved
      *
      * @param SyncState $state
-     * @param array $entitiesData
+     * @param array     $entitiesData
      */
     protected function processEntityDataCollection(SyncState $state, array $entitiesData)
     {
-        if (count($entitiesData) == 0) return;
+        if (count($entitiesData) == 0) {
+            return;
+        }
 
         $allEntitiesResolved = false;
 
         foreach ($entitiesData as $entityData) {
-
             $resolved = true;
 
             // If an entity requires dependencies, initiate dependency resolving
@@ -168,10 +165,8 @@ class SyncManager implements SyncManagerInterface
             }
 
             if (true == $resolved) {
-
                 // Transform the entity data into a real entity
                 $localEntity = $this->transformEntityData($entityData);
-
             } else {
                 $allEntitiesResolved = false;
                 // Add to queue
@@ -179,7 +174,7 @@ class SyncManager implements SyncManagerInterface
             }
         }
 
-        //Get the last entity
+        // Get the last entity
         $lastEntityData = end($entitiesData);
 
         $state->setLastValue($lastEntityData->getEntityId());  //TODO: use config
@@ -198,20 +193,19 @@ class SyncManager implements SyncManagerInterface
 
     /**
      * Deal with entity data dependencies
-     * 
+     *
      * @param $entityData
      * @param $unresolvedDependencies
-     * @return bool
+     * @return Boolean
      */
     protected function processEntityDataCollectionDependencies($entityData, $unresolvedDependencies)
     {
         $resolved = true;
 
-        foreach ($unresolvedDependencies as $entityName => $dependencyData)
-        {
+        foreach ($unresolvedDependencies as $entityName => $dependencyData) {
             // Get the remote identifier for this dependency (eg. for an order the dependency
             // 'customer' would could have remote id 1239
-            $remoteId = (string)$dependencyData['data'];
+            $remoteId = (string) $dependencyData['data'];
 
             // Check if we do not already have a local copy of the dependent entity
             $localEntity = $this->findLocalEntity($entityName, $remoteId);
@@ -225,12 +219,10 @@ class SyncManager implements SyncManagerInterface
                     $localEntity = $this->resolveRemoteEntity($entityName, $remoteId);
 
                     if (null == $localEntity) {
-
                         $resolved = false;
                         // Persist this entity data for a later attempt
                         $this->gateway->updateEntityData($entityData);
                     }
-
                 } else {
                    // Register the request to the entity queue  with the remote id and referencing entity
                     $this->queues[$entityName] = array($remoteId, $entityData);
@@ -244,16 +236,17 @@ class SyncManager implements SyncManagerInterface
     }
 
     /**
-     * Resolved and transform into a new local entity for the given remote entity and id
+     * Resolve and transform into a new local entity for the given remote entity and id
      *
-     * @param string $entityName
-     * @param EntityData $remoteId
+     * @param  string     $entityName
+     * @param  EntityData $remoteId
+     * @return mixed
      */
     protected function resolveRemoteEntity($entityName, $remoteId)
     {
         $serviceAdapter = $this->getServiceAdapter($entityName);
 
-        //Get the entity data from the remote system in it's raw form (eg. xml data)
+        // Get the entity data from the remote system in it's raw form (eg. xml data)
         $entityData = $serviceAdapter->fetchEntity($entityName, $remoteId);
 
         //Apply transformation and retrieve the local entity
@@ -268,12 +261,13 @@ class SyncManager implements SyncManagerInterface
         return $localEntity;
     }
 
-
     /**
      * Retrieve a local entity
      *
      * @param $entityName
      * @param $localId
+     * @throws \RuntimeException
+     * @return
      */
     protected function retrieveLocalEntity($entityName, $localId)
     {
@@ -292,16 +286,17 @@ class SyncManager implements SyncManagerInterface
      *
      * Optionally provide the service adapter to do the job
      *
-     * @param EntityData $entityData
-     * @param ServiceAdapterInterface $serviceAdapter
+     * @param  EntityData              $entityData
+     * @param  ServiceAdapterInterface $serviceAdapter
+     * @return mixed
      */
-    protected function transformEntityData(EntityData $entityData, ServiceAdapterInterface $serviceAdapter = null) {
-
+    protected function transformEntityData(EntityData $entityData, ServiceAdapterInterface $serviceAdapter = null)
+    {
         if (null == $serviceAdapter) {
             $serviceAdapter = $this->getServiceAdapter($entityData->getEntityName());
         }
 
-        //Use the service adapter to transform the entity data
+        // Use the service adapter to transform the entity data
         $localEntity = $serviceAdapter->transformEntityData($entityData);
 
         // If the manager is responsible for tracking references between local and remote entity ids

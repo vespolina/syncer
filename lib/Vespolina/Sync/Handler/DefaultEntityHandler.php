@@ -9,19 +9,16 @@ namespace Vespolina\Sync\Handler;
  */
 class DefaultEntityHandler implements EntityHandlerInterface
 {
-
     public function hasDependencies($entity)
     {
         return false;
     }
 
-    function emit($entity)
+    public function emit($entity)
     {
-
     }
 
-    function merge(array $resolvedDependencies)
+    public function merge(array $resolvedDependencies)
     {
-
     }
 }

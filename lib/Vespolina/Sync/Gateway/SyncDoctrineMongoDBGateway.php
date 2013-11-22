@@ -10,32 +10,34 @@
 namespace Vespolina\Sync\Gateway;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Vespolina\Entity\Action\EntityStateInterface;
 use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\IdMap;
 use Vespolina\Sync\Entity\SyncStateInterface;
-
 
 class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
 {
     protected $entityDataClass;
     protected $stateClass;
     protected $dm;
+    protected $idMapClass;
 
     /**
      * @param DocumentManager $dm
-     * @param string $actionDefinitionClass
-     * @param string $actionClass
+     * @param string          $entityDataClass
+     * @param string          $stateClass
+     * @param string          $idMapClass
      */
-    public function __construct(DocumentManager $dm,
+    public function __construct(
+        DocumentManager $dm,
         $entityDataClass = 'Vespolina\Sync\Entity\EntityData',
         $stateClass = 'Vespolina\Sync\Entity\SyncState',
-        $idMapClass = 'Vespolina\Sync\Entity\IdMap')
+        $idMapClass = 'Vespolina\Sync\Entity\IdMap'
+    )
     {
-        $this->idMapClass = $idMapClass;
-        $this->stateClass = $stateClass;
-        $this->entityDataClass = $entityDataClass;
         $this->dm = $dm;
+        $this->entityDataClass = $entityDataClass;
+        $this->stateClass = $stateClass;
+        $this->idMapClass = $idMapClass;
     }
 
     public function findLocalId($entityName, $remoteId)
@@ -46,9 +48,11 @@ class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
             ->getQuery()
             ->getSingleResult();
 
-        if (null != $idMap)
-
+        if (null != $idMap) {
             return $idMap->getLocalId();
+        }
+
+        return null;
     }
 
     public function findStateByEntityName($entityName)

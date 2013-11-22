@@ -2,8 +2,6 @@
 
 namespace Vespolina\Sync\ServiceAdapter;
 
-use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
-
 /**
  * Interface to determine and handle dependencies for a given entity type
  *

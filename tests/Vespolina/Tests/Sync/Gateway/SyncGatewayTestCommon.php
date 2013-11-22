@@ -9,15 +9,17 @@
 
 namespace Vespolina\Tests\Sync\Gateway;
 
-use Omnipay\Common\AbstractGatewayTest;
-use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\SyncState;
-use Vespolina\Sync\Gateway\SyncMemoryGateway;
 
 abstract class SyncGatewayTestCommon extends \PHPUnit_Framework_TestCase
 {
-    /* @var $gateway Vespolina\Sync\Gateway\SyncMemoryGatewayInterface */
+    /* @var $gateway \Vespolina\Sync\Gateway\SyncMemoryGateway */
     protected $gateway;
+
+    public function setUp()
+    {
+        // some common logic to sync gateway implementations
+    }
 
     public function testUpdateIdMapping()
     {

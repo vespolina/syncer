@@ -24,27 +24,28 @@ interface SyncManagerInterface
      * Register a local entity retriever
      *
      * @param string $entityName
-     * @param $retriever  Manager or gateway to retrieve the entity
-     * @param string $method The method which will be called to retrieve the entity when the id passed
+     * @param $retriever Manager or gateway to retrieve the entity
+     * @param  string $method The method which will be called to retrieve the entity when the id passed
      * @return mixed
      */
-    function addLocalEntityRetriever($entityName, $retriever, $method = 'findId');
+    public function addLocalEntityRetriever($entityName, $retriever, $method = 'findId');
 
     /**
      * Register a service adapter
      *
-     * @param ServiceAdapterInterface $serviceAdapter
+     * @param  ServiceAdapterInterface $serviceAdapter
      * @return mixed
      */
-    function addServiceAdapter(ServiceAdapterInterface $serviceAdapter);
+    public function addServiceAdapter(ServiceAdapterInterface $serviceAdapter);
 
     /**
      * Execute synchronization for the given list of entities
      *
-     * @param array $entityNames
+     * @param  array   $entityNames
+     * @param  integer $size
      * @return mixed
      */
-    function execute(array $entityNames = array(), $size = 0);
+    public function execute(array $entityNames = array(), $size = 0);
 
     /**
      * Retrieve the synchronisation state for the entity
@@ -52,5 +53,5 @@ interface SyncManagerInterface
      * @param $entityName
      * @return SyncStateInterface
      */
-    function getState($entityName);
+    public function getState($entityName);
 }

@@ -6,7 +6,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace Vespolina\Tests\Sync\Functional\Entity;
 
 class LocalProduct
@@ -14,7 +14,8 @@ class LocalProduct
     public $id;
     public $category;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 }

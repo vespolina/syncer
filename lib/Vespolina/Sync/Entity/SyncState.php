@@ -9,11 +9,8 @@
 
 namespace Vespolina\Sync\Entity;
 
-use Vespolina\Sync\Entity\SyncStateInterface;
-
-
 /**
- * An class to manage the synchronization state of a collection of entities of the same type
+ * A class to manage the synchronization state of a collection of entities of the same type
  *
  * @author Daniel Kucharski <daniel@vespolina.org>
  */
@@ -53,7 +50,7 @@ class SyncState implements SyncStateInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getEntityName()
     {
@@ -75,7 +72,4 @@ class SyncState implements SyncStateInterface
     {
         return $this->lastValue;
     }
-
-
-
 }
