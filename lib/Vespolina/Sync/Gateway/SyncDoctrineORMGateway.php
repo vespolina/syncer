@@ -22,10 +22,10 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
     protected $idMapClass;
 
     /**
-     * @param EntityManager   $em
-     * @param string          $entityDataClass
-     * @param string          $stateClass
-     * @param string          $idMapClass
+     * @param EntityManager $em
+     * @param string        $entityDataClass
+     * @param string        $stateClass
+     * @param string        $idMapClass
      */
     public function __construct(
         EntityManager $em,
