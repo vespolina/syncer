@@ -56,7 +56,7 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
                 'remoteId' => $remoteId,
             ))
             ->getQuery()
-            ->getSingleResult()
+            ->getOneOrNullResult()
         ;
 
         if (null != $idMap) {
