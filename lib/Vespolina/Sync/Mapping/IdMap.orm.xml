@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="Vespolina\Sync\Entity\IdMap" table="v_sync_entity_id_map">
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="entityName" type="string" />
+        <field name="localId" type="string" nullable="true" />
+        <field name="remoteServiceName" type="string" nullable="true" />
+        <field name="remoteId" type="string" nullable="true" />
+    </entity>
+</doctrine-mapping>

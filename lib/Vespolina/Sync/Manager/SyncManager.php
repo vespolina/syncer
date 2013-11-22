@@ -236,7 +236,7 @@ class SyncManager implements SyncManagerInterface
     }
 
     /**
-     * Resolved and transform into a new local entity for the given remote entity and id
+     * Resolve and transform into a new local entity for the given remote entity and id
      *
      * @param  string     $entityName
      * @param  EntityData $remoteId
@@ -246,7 +246,7 @@ class SyncManager implements SyncManagerInterface
     {
         $serviceAdapter = $this->getServiceAdapter($entityName);
 
-        //Get the entity data from the remote system in it's raw form (eg. xml data)
+        // Get the entity data from the remote system in it's raw form (eg. xml data)
         $entityData = $serviceAdapter->fetchEntity($entityName, $remoteId);
 
         //Apply transformation and retrieve the local entity
@@ -296,7 +296,7 @@ class SyncManager implements SyncManagerInterface
             $serviceAdapter = $this->getServiceAdapter($entityData->getEntityName());
         }
 
-        //Use the service adapter to transform the entity data
+        // Use the service adapter to transform the entity data
         $localEntity = $serviceAdapter->transformEntityData($entityData);
 
         // If the manager is responsible for tracking references between local and remote entity ids

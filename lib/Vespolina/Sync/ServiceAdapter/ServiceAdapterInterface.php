@@ -45,7 +45,7 @@ interface ServiceAdapterInterface
     public function getSupportedEntities();
 
     /**
-     * Does this service adapter supports $entityName ?
+     * Does this service adapter support $entityName ?
      *
      * @param $entityName
      * @return mixed
