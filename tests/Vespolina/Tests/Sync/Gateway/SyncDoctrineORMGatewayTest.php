@@ -36,8 +36,8 @@ class SyncDoctrineORMGatewayTest extends SyncGatewayTestCommon
         $config->setMetadataDriverImpl($xmlDriver);
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
-        $doctrineODM = EntityManager::create(null, $config);
-        $this->gateway = new SyncDoctrineORMGateway($doctrineODM, 'Vespolina\Entity\Action\Action');
+        $doctrineORM = EntityManager::create(null, $config);
+        $this->gateway = new SyncDoctrineORMGateway($doctrineORM, 'Vespolina\Entity\Action\Action');
 
         parent::setUp();
     }
