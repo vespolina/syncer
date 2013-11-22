@@ -47,10 +47,14 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
                 ->select('i')
                 ->from($this->idMapClass, 'i')
                 ->where($qb->expr()->andX(
-                    $qb->expr()->eq('i.entityName', $entityName),
-                    $qb->expr()->eq('i.remoteId', $remoteId)
+                    $qb->expr()->eq('i.entityName', ':entityName'),
+                    $qb->expr()->eq('i.remoteId', ':remoteId')
                 )
             )
+            ->setParameters(array(
+                'entityName' => $entityName,
+                'remoteId' => $remoteId,
+            ))
             ->getQuery()
             ->getSingleResult()
         ;
@@ -69,7 +73,8 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         return $qb
             ->select('s')
             ->from($this->stateClass, 's')
-            ->where($qb->expr()->eq('s.entityName', $entityName))
+            ->where($qb->expr()->eq('s.entityName', ':entityName'))
+            ->setParameters(array('entityName' => $entityName))
             ->getQuery()
             ->getSingleResult()
         ;

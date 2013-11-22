@@ -51,6 +51,7 @@ class SyncDoctrineORMGatewayTest extends SyncGatewayTestCommon
         if (!empty($metadatas)) {
             // Create SchemaTool
             $tool = new SchemaTool($em);
+            $tool->dropDatabase();
             $tool->createSchema($metadatas);
         } else {
             throw \Exception('No Metadata Classes to process.');
