@@ -9,7 +9,7 @@ and licensed under the [MIT License](LICENSE).
 ## Description
 
 This library handles synchronisation of entities (eg. products, orders, invoices, content) from a remote service into a local application.
-It furthers allows dependent entities to be synchronized as well.   For instance in order to retrieve an invoice you would also need remote customer information and referenced products.
+It furthers allows dependent entities to be synchronized as well. For instance in order to retrieve an invoice you would also need remote customer information and referenced products.
 
 Partial retrieved entities and dependent entities can be persisted to a gateway allowing the process to be halted at any time and picked up later.
 
@@ -22,13 +22,13 @@ None ;-)
 Example usage
 
 ```php
-// Create a new manager and persist data in memory
+// Create a new manager capable of persisting data in memory and default configuration
 $syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $this->logger);
 
 // Instantiate your own service adapter, for example for the ZOHO api
 $zohoServiceAdapter = new ZohoServiceAdapter($this->config, $this->logger);,
 
-// Register the service adapter.  The service adapter will indicate it supports the 'invoice' entity
+// Register the service adapter. The service adapter will indicate it supports the 'invoice' entity
 $syncManager->addServiceAdapter($zohoServiceAdapter);
 
 // Register a local object manager to retrieve local customer instances from the database
@@ -46,11 +46,11 @@ This instance contains the name of the entity (eg. 'invoice'), the remote identi
 When dependencies are detected by the sync manager it will first check if the dependency already exists in the local application.
 If this isn't the case the configured service adapter for the dependent remote entity will be used to retrieve and create the entity local.
 For instance the zoho invoice entity requires the zoho customer entity as well.
-Therefore the remote customer information needs to be retrieved first and a local customer instance needs to be created and persisted.  Only then the invoice can be created.
+Therefore the remote customer information needs to be retrieved first and a local customer instance needs to be created and persisted. Only then the invoice can be created.
 
 The system can directly resolve dependencies when detected or first store the partial data of the main entity (eg. 'invoice').
 
-Resolve dependencies inmediately:
+Resolve dependencies immediately (default):
 
 1. For each remote invoice
 2. Register partial invoice data in EntityData,
@@ -59,7 +59,7 @@ Resolve dependencies inmediately:
 4. When local 'customer' and 'product entities have been created, use that to create the invoice entity
 5. End for each remote invoice
 
-Delay resolving dependencies:
+Delay resolving dependencies (`delay_dependency_processing` is set to true):
 
 1. For each remote invoice
 2. Register partial invoice data in EntityData,
@@ -69,7 +69,7 @@ Delay resolving dependencies:
 6. End for each unresolved dependency
 7. Retrieve partial entity date invoices
 8. transform into a real invoice
-9. When local 'customer' and 'product entities have been created, use that to create the invoice entity
+9. When local 'customer' and 'product' entities have been created, use that to create the invoice entity
 
 Having all dependencies resolved the requested entity (eg 'invoice') is created using the *transformEntityData* method of the service adapter.
 
