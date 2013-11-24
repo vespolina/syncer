@@ -13,8 +13,6 @@ It furthers allows dependent entities to be synchronized as well.   For instance
 
 Partial retrieved entities and dependent entities can be persisted to a gateway allowing the process to be halted at any time and picked up later.
 
-
-
 ## Requirements
 
 None ;-)
@@ -25,7 +23,7 @@ Example usage
 
 ```php
 // Create a new manager and persist data in memory
-$syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $this->logger );
+$syncManager = new SyncManager(new SyncMemoryGateway(), new EventDispatcher(), $this->logger);
 
 // Instantiate your own service adapter, for example for the ZOHO api
 $zohoServiceAdapter = new ZohoServiceAdapter($this->config, $this->logger);,
@@ -75,6 +73,37 @@ Delay resolving dependencies:
 
 Having all dependencies resolved the requested entity (eg 'invoice') is created using the *transformEntityData* method of the service adapter.
 
+You can also provide configuration options to the manager to define your synchronisation:
+
+```php
+$yamlParser = new Parser();
+$config = $yamlParser->parse(file_get_contents(__DIR__ . '/config.yml'));
+$this->manager = new SyncManager($gateway, $dispatcher, $logger, $config['syncer']);
+```
+
+And your sync configuration file could look like:
+
+```yml
+syncer:
+    direction: download
+    default_direction: download
+    use_id_mapping: true
+    default_remote: demo_system_1
+    delay_dependency_processing: false
+    entities:
+        customer:
+            strategy:  changed_at
+        product:
+            strategy: incremental_id
+        invoice:
+            strategy: incremental_id
+            dependencies:
+                - customer
+                - product
+    remotes:
+        demo_system_1:
+            adapter: Vespolina\Sync\Adapter\RemoteAdapter
+```
 
 For the install guide and reference, see:
 
