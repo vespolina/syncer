@@ -86,9 +86,7 @@ And your sync configuration file could look like:
 ```yml
 syncer:
     direction: download
-    default_direction: download
     use_id_mapping: true
-    default_remote: demo_system_1
     delay_dependency_processing: false
     entities:
         customer:
