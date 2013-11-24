@@ -90,6 +90,11 @@ class SyncManager implements SyncManagerInterface
         }
     }
 
+    /**
+     * @param $entityName
+     * @return \Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface
+     * @throws \RuntimeException
+     */
     public function getServiceAdapter($entityName)
     {
         if (array_key_exists($entityName, $this->serviceAdaptersByEntityName)) {
@@ -144,8 +149,8 @@ class SyncManager implements SyncManagerInterface
      * Test if any dependencies do exist and retrieve those dependencies if they haven't
      * been yet retrieved
      *
-     * @param SyncState $state
-     * @param array     $entitiesData
+     * @param SyncState                           $state
+     * @param \Vespolina\Sync\Entity\EntityData[] $entitiesData
      */
     protected function processEntityDataCollection(SyncState $state, array $entitiesData)
     {
@@ -157,7 +162,7 @@ class SyncManager implements SyncManagerInterface
             $resolved = true;
 
             // If an entity requires dependencies, initiate dependency resolving
-            // Depending on the configuration it will be resolved inmediately or delayed
+            // Depending on the configuration it will be resolved immediately or delayed
             if ($unresolvedDependencies = $entityData->getUnresolvedDependencies()) {
                $resolved = $this->processEntityDataCollectionDependencies($entityData, $unresolvedDependencies);
             }
@@ -191,11 +196,11 @@ class SyncManager implements SyncManagerInterface
     /**
      * Deal with entity data dependencies
      *
-     * @param $entityData
+     * @param \Vespolina\Sync\Entity\EntityData $entityData
      * @param $unresolvedDependencies
      * @return Boolean
      */
-    protected function processEntityDataCollectionDependencies($entityData, $unresolvedDependencies)
+    protected function processEntityDataCollectionDependencies(EntityData $entityData, $unresolvedDependencies)
     {
         $resolved = true;
 
