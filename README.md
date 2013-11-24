@@ -75,6 +75,7 @@ Delay resolving dependencies:
 
 Having all dependencies resolved the requested entity (eg 'invoice') is created using the *transformEntityData* method of the service adapter.
 
+If you are using Symfony you can check the [Syncer Bundle](https://github.com/cordoval/CordovalSyncerBundle).
 
 For the install guide and reference, see:
 
