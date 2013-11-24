@@ -8,7 +8,7 @@ and licensed under the [MIT License](LICENSE).
 
 ## Description
 
-This library handles sychronisation of entities (eg. products, orders, invoices, content) from a remote service into a local application.
+This library handles synchronisation of entities (eg. products, orders, invoices, content) from a remote service into a local application.
 It furthers allows dependent entities to be synchronized as well.   For instance in order to retrieve an invoice you would also need remote customer information and referenced products.
 
 Partial retrieved entities and dependent entities can be persisted to a gateway allowing the process to be halted at any time and picked up later.
