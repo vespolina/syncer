@@ -76,7 +76,7 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
             ->where($qb->expr()->eq('s.entityName', ':entityName'))
             ->setParameters(array('entityName' => $entityName))
             ->getQuery()
-            ->getSingleResult()
+            ->getOneOrNullResult()
         ;
     }
 
