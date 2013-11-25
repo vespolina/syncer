@@ -19,7 +19,6 @@ use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
  */
 interface SyncManagerInterface
 {
-
     /**
      * Register a local entity retriever
      *

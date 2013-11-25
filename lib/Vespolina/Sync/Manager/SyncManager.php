@@ -70,7 +70,7 @@ class SyncManager implements SyncManagerInterface
     public function execute(array $entityNames = array(), $size = 0)
     {
         foreach ($entityNames as $entityName) {
-            //Prepare synchronization, retrieve the last key value we retrieved
+            // Prepare synchronization, retrieve the last key value we retrieved
             $state = $this->getState($entityName);
             $lastValue = $state->getLastValue();
 
@@ -90,13 +90,18 @@ class SyncManager implements SyncManagerInterface
         }
     }
 
+    /**
+     * @param $entityName
+     * @return \Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface
+     * @throws \RuntimeException
+     */
     public function getServiceAdapter($entityName)
     {
         if (array_key_exists($entityName, $this->serviceAdaptersByEntityName)) {
             return $this->serviceAdaptersByEntityName[$entityName];
-        } else {
-            throw new \RuntimeException('No service adapter available for entity ' . $entityName);
         }
+
+        throw new \RuntimeException('No service adapter available for entity ' . $entityName);
     }
 
     /**
@@ -118,7 +123,7 @@ class SyncManager implements SyncManagerInterface
      */
     public function findLocalEntity($entityName, $remoteId)
     {
-        //If ID mapping is active we first test if the id exists in the local id <> remote id mapping
+        // If ID mapping is active we first test if the id exists in the local id <> remote id mapping
         if ($this->config['use_id_mapping']) {
 
             $localEntityId = $this->gateway->findLocalId($entityName, $remoteId);
@@ -144,8 +149,8 @@ class SyncManager implements SyncManagerInterface
      * Test if any dependencies do exist and retrieve those dependencies if they haven't
      * been yet retrieved
      *
-     * @param SyncState $state
-     * @param array     $entitiesData
+     * @param SyncState                           $state
+     * @param \Vespolina\Sync\Entity\EntityData[] $entitiesData
      */
     protected function processEntityDataCollection(SyncState $state, array $entitiesData)
     {
@@ -153,13 +158,11 @@ class SyncManager implements SyncManagerInterface
             return;
         }
 
-        $allEntitiesResolved = false;
-
         foreach ($entitiesData as $entityData) {
             $resolved = true;
 
             // If an entity requires dependencies, initiate dependency resolving
-            // Depending on the configuration it will be resolved inmediately or delayed
+            // Depending on the configuration it will be resolved immediately or delayed
             if ($unresolvedDependencies = $entityData->getUnresolvedDependencies()) {
                $resolved = $this->processEntityDataCollectionDependencies($entityData, $unresolvedDependencies);
             }
@@ -168,7 +171,6 @@ class SyncManager implements SyncManagerInterface
                 // Transform the entity data into a real entity
                 $localEntity = $this->transformEntityData($entityData);
             } else {
-                $allEntitiesResolved = false;
                 // Add to queue
                 $this->gateway->updateEntityData($entityData);
             }
@@ -177,7 +179,7 @@ class SyncManager implements SyncManagerInterface
         // Get the last entity
         $lastEntityData = end($entitiesData);
 
-        $state->setLastValue($lastEntityData->getEntityId());  //TODO: use config
+        $state->setLastValue($lastEntityData->getEntityId());  // TODO: use config
     }
 
     /**
@@ -194,11 +196,11 @@ class SyncManager implements SyncManagerInterface
     /**
      * Deal with entity data dependencies
      *
-     * @param $entityData
+     * @param \Vespolina\Sync\Entity\EntityData $entityData
      * @param $unresolvedDependencies
      * @return Boolean
      */
-    protected function processEntityDataCollectionDependencies($entityData, $unresolvedDependencies)
+    protected function processEntityDataCollectionDependencies(EntityData $entityData, $unresolvedDependencies)
     {
         $resolved = true;
 
@@ -224,7 +226,7 @@ class SyncManager implements SyncManagerInterface
                         $this->gateway->updateEntityData($entityData);
                     }
                 } else {
-                   // Register the request to the entity queue  with the remote id and referencing entity
+                    // Register the request to the entity queue  with the remote id and referencing entity
                     $this->queues[$entityName] = array($remoteId, $entityData);
                 }
             }
@@ -249,7 +251,7 @@ class SyncManager implements SyncManagerInterface
         // Get the entity data from the remote system in it's raw form (eg. xml data)
         $entityData = $serviceAdapter->fetchEntity($entityName, $remoteId);
 
-        //Apply transformation and retrieve the local entity
+        // Apply transformation and retrieve the local entity
         $localEntity = $this->transformEntityData($entityData, $serviceAdapter);
 
         if (null != $localEntity) {
