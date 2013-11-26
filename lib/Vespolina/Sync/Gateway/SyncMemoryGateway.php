@@ -61,14 +61,6 @@ class SyncMemoryGateway implements SyncGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdMapping()
-    {
-        return $this->idMapping;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
         if (array_key_exists($entityName, $this->idMapping)) {
@@ -81,6 +73,9 @@ class SyncMemoryGateway implements SyncGatewayInterface
         $this->idMapping[$entityName] = $entityMapping;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateEntityData(EntityData $entityData)
     {
         $this->entityData[$entityData->getKey()] = $entityData;

@@ -40,6 +40,9 @@ class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
         $this->idMapClass = $idMapClass;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalId($entityName, $remoteId)
     {
         $idMap = $this->dm->createQueryBuilder($this->idMapClass)
@@ -55,6 +58,9 @@ class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
         return null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findStateByEntityName($entityName)
     {
         return $this->dm->createQueryBuilder($this->stateClass)
@@ -63,21 +69,30 @@ class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
             ->getSingleResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
         $this->dm->persist(new IdMap($entityName, $localId, $remoteId, 'service'));
         $this->dm->flush();
     }
 
-    public function updateState(SyncStateInterface $state)
-    {
-        $this->dm->persist($state);
-        $this->dm->flush();
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function updateEntityData(EntityData $entityData)
     {
         $this->dm->persist($entityData);
+        $this->dm->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateState(SyncStateInterface $state)
+    {
+        $this->dm->persist($state);
         $this->dm->flush();
     }
 }

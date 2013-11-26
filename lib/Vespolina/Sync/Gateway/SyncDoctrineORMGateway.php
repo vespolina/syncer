@@ -40,6 +40,9 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         $this->idMapClass = $idMapClass;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalId($entityName, $remoteId)
     {
         $qb = $this->em->createQueryBuilder();
@@ -66,6 +69,9 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         return null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findStateByEntityName($entityName)
     {
         $qb = $this->em->createQueryBuilder();
@@ -80,21 +86,30 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
         $this->em->persist(new IdMap($entityName, $localId, $remoteId, 'service'));
         $this->em->flush();
     }
 
-    public function updateState(SyncStateInterface $state)
-    {
-        $this->em->persist($state);
-        $this->em->flush();
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function updateEntityData(EntityData $entityData)
     {
         $this->em->persist($entityData);
+        $this->em->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateState(SyncStateInterface $state)
+    {
+        $this->em->persist($state);
         $this->em->flush();
     }
 }

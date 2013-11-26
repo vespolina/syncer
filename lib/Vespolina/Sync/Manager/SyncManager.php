@@ -240,8 +240,8 @@ class SyncManager implements SyncManagerInterface
     /**
      * Resolve and transform into a new local entity for the given remote entity and id
      *
-     * @param  string     $entityName
-     * @param  EntityData $remoteId
+     * @param  string $entityName
+     * @param  mixed $remoteId
      * @return mixed
      */
     protected function resolveRemoteEntity($entityName, $remoteId)

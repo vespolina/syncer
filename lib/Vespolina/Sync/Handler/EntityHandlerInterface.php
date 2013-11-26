@@ -10,7 +10,7 @@ namespace Vespolina\Sync\Handler;
 interface EntityHandlerInterface
 {
     /**
-     * Return if the entity type has any dependency
+     * Return true if the entity type has any dependency
      *
      * @param $entity
      * @return Boolean
