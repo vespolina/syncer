@@ -23,6 +23,7 @@ class SyncState implements SyncStateInterface
     public function __construct($entityName)
     {
         $this->entityName = $entityName;
+        $this->lastValue = null;
     }
 
     /**

@@ -79,7 +79,13 @@ class SyncManager implements SyncManagerInterface
             // Get the service adapter for this entity
             $adapter = $this->getServiceAdapter($entityName);
 
-            $this->logger->info('Fetching ' . $entityName . ' starting at "' . $lastValue . '"');
+            if (null == $lastValue) {
+                $message = 'Fetching ' . $entityName . ' initialized for the first time';
+            } else {
+                $message = 'Fetching ' . $entityName . ' starting at "' . $lastValue . '"';
+            }
+
+            $this->logger->info($message);
 
             // Fetch raw entity data after 'lastValue'
             $entitiesData = $adapter->fetchEntities($entityName, $lastValue, $size);
