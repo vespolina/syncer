@@ -53,4 +53,13 @@ interface SyncManagerInterface
      * @return SyncStateInterface
      */
     public function getState($entityName);
+
+    /**
+     * Retrieve local entity, localId or null if not found
+     *
+     * @param $entityName
+     * @param $remoteId
+     * @return object|mixed|null
+     */
+    public function findLocalEntity($entityName, $remoteId);
 }

@@ -134,6 +134,8 @@ class SyncManager implements SyncManagerInterface
 
             return $localEntityId;  // Todo retrieve real entity but we don't need this yet
         }
+
+        return null;
     }
 
     /**
