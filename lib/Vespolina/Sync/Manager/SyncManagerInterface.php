@@ -25,7 +25,6 @@ interface SyncManagerInterface
      * @param string $entityName
      * @param $retriever Manager or gateway to retrieve the entity
      * @param  string $method The method which will be called to retrieve the entity when the id passed
-     * @return mixed
      */
     public function addLocalEntityRetriever($entityName, $retriever, $method = 'findId');
 
@@ -33,7 +32,6 @@ interface SyncManagerInterface
      * Register a service adapter
      *
      * @param  ServiceAdapterInterface $serviceAdapter
-     * @return mixed
      */
     public function addServiceAdapter(ServiceAdapterInterface $serviceAdapter);
 
@@ -42,7 +40,6 @@ interface SyncManagerInterface
      *
      * @param  array   $entityNames
      * @param  integer $size
-     * @return mixed
      */
     public function execute(array $entityNames = array(), $size = 0);
 
