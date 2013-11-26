@@ -37,8 +37,10 @@ class SyncManager implements SyncManagerInterface
         $this->serviceAdaptersByEntityName = array();
         $this->queues = array();
 
-        $defaultConfig = array('delay_dependency_processing' => false,
-                               'use_id_mapping' => true);
+        $defaultConfig = array(
+            'delay_dependency_processing' => false,
+            'use_id_mapping'              => true,
+        );
         $this->config = array_merge($config, $defaultConfig);
 
         // Setup the default entity handler
@@ -244,7 +246,7 @@ class SyncManager implements SyncManagerInterface
      *
      * @param  string $entityName
      * @param  mixed $remoteId
-     * @return mixed
+     * @return object
      */
     protected function resolveRemoteEntity($entityName, $remoteId)
     {
