@@ -57,7 +57,7 @@ interface ServiceAdapterInterface
      * The method will be called by the sync manager when all dependencies have been resolved
      *
      * @param  EntityData $entityData
-     * @return mixed
+     * @return object
      */
     public function transformEntityData(EntityData $entityData);
 }

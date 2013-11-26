@@ -271,7 +271,7 @@ class SyncManager implements SyncManagerInterface
      * @param $entityName
      * @param $localId
      * @throws \RuntimeException
-     * @return
+     * @return object|null
      */
     protected function retrieveLocalEntity($entityName, $localId)
     {
@@ -292,7 +292,7 @@ class SyncManager implements SyncManagerInterface
      *
      * @param  EntityData              $entityData
      * @param  ServiceAdapterInterface $serviceAdapter
-     * @return mixed
+     * @return object
      */
     protected function transformEntityData(EntityData $entityData, ServiceAdapterInterface $serviceAdapter = null)
     {
