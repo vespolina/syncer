@@ -9,7 +9,6 @@
 
 namespace Vespolina\Sync\Manager;
 
-use Vespolina\Sync\Entity\SyncStateInterface;
 use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
 
 /**
