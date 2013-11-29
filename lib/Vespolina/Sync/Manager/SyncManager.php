@@ -172,7 +172,7 @@ class SyncManager implements SyncManagerInterface
             // If an entity requires dependencies, initiate dependency resolving
             // Depending on the configuration it will be resolved immediately or delayed
             if ($unresolvedDependencies = $entityData->getUnresolvedDependencies()) {
-               $resolved = $this->processEntityDataCollectionDependencies($entityData, $unresolvedDependencies);
+               $resolved = $this->processEntityDataDependencies($entityData, $unresolvedDependencies);
             }
 
             if (true == $resolved) {
@@ -208,7 +208,7 @@ class SyncManager implements SyncManagerInterface
      * @param array $unresolvedDependencies
      * @return Boolean
      */
-    protected function processEntityDataCollectionDependencies(EntityData $entityData, $unresolvedDependencies)
+    protected function processEntityDataDependencies(EntityData $entityData, $unresolvedDependencies)
     {
         $resolved = true;
 
@@ -234,7 +234,7 @@ class SyncManager implements SyncManagerInterface
                         $this->gateway->updateEntityData($entityData);
                     }
                 } else {
-                    // Register the request to the entity queue  with the remote id and referencing entity
+                    // Register the request to the entity queue with the remote id and referencing entity
                     $this->queues[$entityName] = array($remoteId, $entityData);
                 }
             }
