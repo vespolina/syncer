@@ -230,8 +230,6 @@ class SyncManager implements SyncManagerInterface
 
                     if (null == $localEntity) {
                         $resolved = false;
-                        // Persist this entity data for a later attempt
-                        $this->gateway->updateEntityData($entityData);
                     }
                 } else {
                     // Register the request to the entity queue with the remote id and referencing entity
@@ -240,6 +238,7 @@ class SyncManager implements SyncManagerInterface
             }
 
             $entityData->setDependencyReference($entityName, $localEntity);
+            $this->gateway->updateEntityData($entityData);
         }
 
         return $resolved;
