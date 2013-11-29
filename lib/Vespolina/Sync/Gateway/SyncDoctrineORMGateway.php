@@ -17,7 +17,7 @@ use Vespolina\Sync\Entity\SyncStateInterface;
 /**
  * Doctrine ORM implementation of the Gateway for synchronization
  *
- * @author Luis cordova <cordoval@gmail.com>
+ * @author Luis Cordova <cordoval@gmail.com>
  */
 class SyncDoctrineORMGateway implements SyncGatewayInterface
 {
