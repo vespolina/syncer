@@ -24,7 +24,7 @@ interface SyncGatewayInterface
      *
      * @param $entityName
      * @param $remoteId
-     * @return mixed
+     * @return integer|null
      */
     public function findLocalId($entityName, $remoteId);
 
@@ -32,7 +32,7 @@ interface SyncGatewayInterface
      * Retrieve the current state for the specified entity name
      *
      * @param $entityName
-     * @return \Vespolina\Sync\Entity\SyncState
+     * @return \Vespolina\Sync\Entity\SyncStateInterface|null
      */
     public function findStateByEntityName($entityName);
 
@@ -56,7 +56,6 @@ interface SyncGatewayInterface
      * Update the synchronisation state of an entity collection
      *
      * @param  SyncStateInterface $syncState
-     * @return mixed
      */
     public function updateState(SyncStateInterface $syncState);
 }

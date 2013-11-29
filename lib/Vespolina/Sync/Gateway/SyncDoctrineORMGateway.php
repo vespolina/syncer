@@ -14,6 +14,11 @@ use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\IdMap;
 use Vespolina\Sync\Entity\SyncStateInterface;
 
+/**
+ * Doctrine ORM implementation of the Gateway for synchronization
+ *
+ * @author Luis cordova <cordoval@gmail.com>
+ */
 class SyncDoctrineORMGateway implements SyncGatewayInterface
 {
     protected $entityDataClass;
@@ -92,10 +97,18 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
      */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
-        // @todo inspiran why here we don't look up if there is
-        // already an IdMap with the same information? I mean
-        // why persisting a new one?
-        $this->em->persist(new IdMap($entityName, $localId, $remoteId, 'service'));
+        $repo = $this->em->getRepository($this->idMapClass);
+        $idMap = $repo->findOneBy(array(
+                'entityName' => $entityName,
+                'localId' => $localId,
+                'remoteId' => $remoteId,
+            )
+        );
+        if (null == $idMap) {
+            $idMap = new IdMap($entityName, $localId, $remoteId, 'service');
+        }
+
+        $this->em->persist($idMap);
         $this->em->flush();
     }
 

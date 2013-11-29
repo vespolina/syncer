@@ -14,6 +14,11 @@ use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\IdMap;
 use Vespolina\Sync\Entity\SyncStateInterface;
 
+/**
+ * MongoDB implementation of the Gateway for synchronization
+ *
+ * @author Daniel Kucharski <daniel@vespolina.org>
+ */
 class SyncDoctrineMongoDBGateway implements SyncGatewayInterface
 {
     protected $entityDataClass;
