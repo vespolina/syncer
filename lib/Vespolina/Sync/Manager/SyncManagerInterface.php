@@ -38,23 +38,23 @@ interface SyncManagerInterface
     /**
      * Execute synchronization for the given list of entities
      *
-     * @param array   $entityNames
-     * @param integer $size
+     * @param array        $entityNames
+     * @param integer|null $size
      */
     public function execute(array $entityNames = array(), $size = 0);
 
     /**
      * Retrieve the synchronisation state for the entity
      *
-     * @param $entityName
-     * @return SyncStateInterface
+     * @param string $entityName
+     * @return \Vespolina\Sync\Entity\SyncStateInterface
      */
     public function getState($entityName);
 
     /**
      * Retrieve local entity, localId or null if not found
      *
-     * @param $entityName
+     * @param string $entityName
      * @param $remoteId
      * @return object|mixed|null
      */
