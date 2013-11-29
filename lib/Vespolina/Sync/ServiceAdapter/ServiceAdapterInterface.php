@@ -21,18 +21,18 @@ interface ServiceAdapterInterface
     /**
      * Retrieve entities starting from $lastValue
      *
-     * @param $entityName
+     * @param string $entityName
      * @param $lastValue
-     * @param $packageSize Max number of entities to retrieve
-     * @return array EntityData
+     * @param integer $packageSize Max number of entities to retrieve
+     * @return \Vespolina\Sync\Entity\EntityData[]
      */
     public function fetchEntities($entityName, $lastValue, $packageSize);
 
     /**
      * Fetch a specific remote entity
      *
-     * @param $entityName
-     * @param $remoteId
+     * @param string $entityName
+     * @param string $remoteId
      * @return \Vespolina\Sync\Entity\EntityData
      */
     public function fetchEntity($entityName, $remoteId);
@@ -47,8 +47,8 @@ interface ServiceAdapterInterface
     /**
      * Does this service adapter support $entityName ?
      *
-     * @param $entityName
-     * @return mixed
+     * @param string $entityName
+     * @return Boolean
      */
     public function supportsEntity($entityName);
 
@@ -56,8 +56,8 @@ interface ServiceAdapterInterface
      * Transform the entity data object into the real entity.
      * The method will be called by the sync manager when all dependencies have been resolved
      *
-     * @param  EntityData $entityData
-     * @return mixed
+     * @param \Vespolina\Sync\Entity\EntityData $entityData
+     * @return object
      */
     public function transformEntityData(EntityData $entityData);
 }

@@ -10,9 +10,9 @@ namespace Vespolina\Sync\Handler;
 interface EntityHandlerInterface
 {
     /**
-     * Return if the entity type has any dependency
+     * Return true if the entity type has any dependency
      *
-     * @param $entity
+     * @param string $entity
      * @return Boolean
      */
     public function hasDependencies($entity);
@@ -20,8 +20,8 @@ interface EntityHandlerInterface
     /**
      * Emit the request to resolve dependencies
      *
-     * @param $entity
-     * @return mixed List of dependencies to be resolved
+     * @param string $entity
+     * @return array List of dependencies to be resolved
      */
     public function emit($entity);
 
@@ -29,7 +29,7 @@ interface EntityHandlerInterface
      * Merge resolved dependencies for the entity
      *
      * @param  array $resolvedDependencies
-     * @return mixed
+     * @return array
      */
     public function merge(array $resolvedDependencies);
 }

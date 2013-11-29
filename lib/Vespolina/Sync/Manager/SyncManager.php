@@ -12,6 +12,7 @@ namespace Vespolina\Sync\Manager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vespolina\Sync\Entity\SyncState;
+use Vespolina\Sync\Entity\SyncStateInterface;
 use Vespolina\Sync\Gateway\SyncGatewayInterface;
 use Vespolina\Sync\Handler\DefaultEntityHandler;
 use Vespolina\Sync\ServiceAdapter\ServiceAdapterInterface;
@@ -37,8 +38,10 @@ class SyncManager implements SyncManagerInterface
         $this->serviceAdaptersByEntityName = array();
         $this->queues = array();
 
-        $defaultConfig = array('delay_dependency_processing' => false,
-                               'use_id_mapping' => true);
+        $defaultConfig = array(
+            'delay_dependency_processing' => false,
+            'use_id_mapping'              => true,
+        );
         $this->config = array_merge($config, $defaultConfig);
 
         // Setup the default entity handler
@@ -77,7 +80,13 @@ class SyncManager implements SyncManagerInterface
             // Get the service adapter for this entity
             $adapter = $this->getServiceAdapter($entityName);
 
-            $this->logger->info('Fetching ' . $entityName . ' starting at "' . $lastValue . '"');
+            if (null == $lastValue) {
+                $message = 'Fetching ' . $entityName . ' initialized for the first time';
+            } else {
+                $message = 'Fetching ' . $entityName . ' starting at "' . $lastValue . '"';
+            }
+
+            $this->logger->info($message);
 
             // Fetch raw entity data after 'lastValue'
             $entitiesData = $adapter->fetchEntities($entityName, $lastValue, $size);
@@ -123,7 +132,7 @@ class SyncManager implements SyncManagerInterface
      */
     public function findLocalEntity($entityName, $remoteId)
     {
-        // If ID mapping is active we first test if the id exists in the local id <> remote id mapping
+        // If id mapping is active we first test if the id exists in the local id <> remote id mapping
         if ($this->config['use_id_mapping']) {
 
             $localEntityId = $this->gateway->findLocalId($entityName, $remoteId);
@@ -134,12 +143,11 @@ class SyncManager implements SyncManagerInterface
 
             return $localEntityId;  // Todo retrieve real entity but we don't need this yet
         }
+
+        return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function updateState(SyncState $state)
+    protected function updateState(SyncStateInterface $state)
     {
         $this->gateway->updateState($state);
     }
@@ -149,10 +157,10 @@ class SyncManager implements SyncManagerInterface
      * Test if any dependencies do exist and retrieve those dependencies if they haven't
      * been yet retrieved
      *
-     * @param SyncState                           $state
+     * @param SyncStateInterface                  $state
      * @param \Vespolina\Sync\Entity\EntityData[] $entitiesData
      */
-    protected function processEntityDataCollection(SyncState $state, array $entitiesData)
+    protected function processEntityDataCollection(SyncStateInterface $state, array $entitiesData)
     {
         if (count($entitiesData) == 0) {
             return;
@@ -164,7 +172,7 @@ class SyncManager implements SyncManagerInterface
             // If an entity requires dependencies, initiate dependency resolving
             // Depending on the configuration it will be resolved immediately or delayed
             if ($unresolvedDependencies = $entityData->getUnresolvedDependencies()) {
-               $resolved = $this->processEntityDataCollectionDependencies($entityData, $unresolvedDependencies);
+               $resolved = $this->processEntityDataDependencies($entityData, $unresolvedDependencies);
             }
 
             if (true == $resolved) {
@@ -185,7 +193,7 @@ class SyncManager implements SyncManagerInterface
     /**
      * Maintain the id mapping (local vs remote id)
      *
-     * @param $localEntity
+     * @param string $localEntity
      * @param EntityData $remoteEntityData
      */
     protected function maintainIdMapping($localEntity, EntityData $remoteEntityData)
@@ -197,10 +205,10 @@ class SyncManager implements SyncManagerInterface
      * Deal with entity data dependencies
      *
      * @param \Vespolina\Sync\Entity\EntityData $entityData
-     * @param $unresolvedDependencies
+     * @param array $unresolvedDependencies
      * @return Boolean
      */
-    protected function processEntityDataCollectionDependencies(EntityData $entityData, $unresolvedDependencies)
+    protected function processEntityDataDependencies(EntityData $entityData, $unresolvedDependencies)
     {
         $resolved = true;
 
@@ -222,16 +230,15 @@ class SyncManager implements SyncManagerInterface
 
                     if (null == $localEntity) {
                         $resolved = false;
-                        // Persist this entity data for a later attempt
-                        $this->gateway->updateEntityData($entityData);
                     }
                 } else {
-                    // Register the request to the entity queue  with the remote id and referencing entity
+                    // Register the request to the entity queue with the remote id and referencing entity
                     $this->queues[$entityName] = array($remoteId, $entityData);
                 }
             }
 
             $entityData->setDependencyReference($entityName, $localEntity);
+            $this->gateway->updateEntityData($entityData);
         }
 
         return $resolved;
@@ -240,9 +247,9 @@ class SyncManager implements SyncManagerInterface
     /**
      * Resolve and transform into a new local entity for the given remote entity and id
      *
-     * @param  string     $entityName
-     * @param  EntityData $remoteId
-     * @return mixed
+     * @param  string $entityName
+     * @param  mixed $remoteId
+     * @return object
      */
     protected function resolveRemoteEntity($entityName, $remoteId)
     {
@@ -266,10 +273,10 @@ class SyncManager implements SyncManagerInterface
     /**
      * Retrieve a local entity
      *
-     * @param $entityName
+     * @param string $entityName
      * @param $localId
      * @throws \RuntimeException
-     * @return
+     * @return object|null
      */
     protected function retrieveLocalEntity($entityName, $localId)
     {
@@ -290,7 +297,7 @@ class SyncManager implements SyncManagerInterface
      *
      * @param  EntityData              $entityData
      * @param  ServiceAdapterInterface $serviceAdapter
-     * @return mixed
+     * @return object
      */
     protected function transformEntityData(EntityData $entityData, ServiceAdapterInterface $serviceAdapter = null)
     {

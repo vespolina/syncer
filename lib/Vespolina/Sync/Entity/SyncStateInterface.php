@@ -17,7 +17,12 @@ namespace Vespolina\Sync\Entity;
 interface SyncStateInterface
 {
     /**
-     * @return mixed
+     * @return string
      */
     public function getEntityName();
+
+    /**
+     * @param string $lastValue
+     */
+    public function setLastValue($lastValue);
 }

@@ -14,6 +14,11 @@ use Vespolina\Sync\Entity\EntityData;
 use Vespolina\Sync\Entity\IdMap;
 use Vespolina\Sync\Entity\SyncStateInterface;
 
+/**
+ * Doctrine ORM implementation of the Gateway for synchronization
+ *
+ * @author Luis Cordova <cordoval@gmail.com>
+ */
 class SyncDoctrineORMGateway implements SyncGatewayInterface
 {
     protected $entityDataClass;
@@ -40,6 +45,9 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         $this->idMapClass = $idMapClass;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalId($entityName, $remoteId)
     {
         $qb = $this->em->createQueryBuilder();
@@ -52,9 +60,10 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
                 )
             )
             ->setParameters(array(
-                'entityName' => $entityName,
-                'remoteId' => $remoteId,
-            ))
+                    'entityName' => $entityName,
+                    'remoteId' => $remoteId,
+                )
+            )
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -66,6 +75,9 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         return null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findStateByEntityName($entityName)
     {
         $qb = $this->em->createQueryBuilder();
@@ -80,21 +92,41 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
-        $this->em->persist(new IdMap($entityName, $localId, $remoteId, 'service'));
+        $repo = $this->em->getRepository($this->idMapClass);
+        $idMap = $repo->findOneBy(array(
+                'entityName' => $entityName,
+                'localId' => $localId,
+                'remoteId' => $remoteId,
+            )
+        );
+        if (null == $idMap) {
+            $idMap = new IdMap($entityName, $localId, $remoteId, 'service');
+        }
+
+        $this->em->persist($idMap);
         $this->em->flush();
     }
 
-    public function updateState(SyncStateInterface $state)
-    {
-        $this->em->persist($state);
-        $this->em->flush();
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function updateEntityData(EntityData $entityData)
     {
         $this->em->persist($entityData);
+        $this->em->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateState(SyncStateInterface $state)
+    {
+        $this->em->persist($state);
         $this->em->flush();
     }
 }
