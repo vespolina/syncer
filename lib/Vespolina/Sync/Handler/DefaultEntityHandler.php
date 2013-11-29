@@ -22,6 +22,7 @@ class DefaultEntityHandler implements EntityHandlerInterface
      */
     public function emit($entity)
     {
+        return array();
     }
 
     /**
@@ -29,5 +30,6 @@ class DefaultEntityHandler implements EntityHandlerInterface
      */
     public function merge(array $resolvedDependencies)
     {
+        return array();
     }
 }
