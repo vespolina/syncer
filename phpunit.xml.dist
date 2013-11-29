@@ -2,7 +2,7 @@
 
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Vespolina sync Test Suite">
+        <testsuite name="Vespolina syncer Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
