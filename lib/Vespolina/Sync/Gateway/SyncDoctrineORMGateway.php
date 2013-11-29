@@ -55,9 +55,10 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
                 )
             )
             ->setParameters(array(
-                'entityName' => $entityName,
-                'remoteId' => $remoteId,
-            ))
+                    'entityName' => $entityName,
+                    'remoteId' => $remoteId,
+                )
+            )
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -91,6 +92,9 @@ class SyncDoctrineORMGateway implements SyncGatewayInterface
      */
     public function updateIdMapping($entityName, $localId, $remoteId)
     {
+        // @todo inspiran why here we don't look up if there is
+        // already an IdMap with the same information? I mean
+        // why persisting a new one?
         $this->em->persist(new IdMap($entityName, $localId, $remoteId, 'service'));
         $this->em->flush();
     }
